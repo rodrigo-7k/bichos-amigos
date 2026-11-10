@@ -1,5 +1,5 @@
 // Bichos Amigos — funciona sem internet depois da primeira visita
-const APP = 'bichos-app-v5';
+const APP = 'bichos-app-v6';
 const SONS = 'bichos-sons-v1';
 const FONTES = 'bichos-fontes-v1';
 const ARQUIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
@@ -16,7 +16,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   // páginas do app: tenta a rede (para pegar atualizações) e cai no cache sem internet
   if (url.origin === location.origin) {
-    e.respondWith(fetch(req).then(r => { const c = r.clone(); caches.open(APP).then(k => k.put(req, c)); return r; })
+    e.respondWith(fetch(req, {cache:'no-cache'}).then(r => { const c = r.clone(); caches.open(APP).then(k => k.put(req, c)); return r; })
       .catch(() => caches.match(req).then(r => r || caches.match('./index.html'))));
     return;
   }
