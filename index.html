@@ -452,6 +452,7 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
     <label>Nomes em LETRA MAIÚSCULA <input type="checkbox" id="aj-caps"></label>
     <label>Movimentos e animações <input type="checkbox" id="aj-anim"></label>
     <label>Abrir em tela cheia ao tocar <input type="checkbox" id="aj-cheia"></label>
+    <label>Manter a tela ligada com o app aberto <input type="checkbox" id="aj-tela"></label>
     <label>Liberar todas as fases da Aventura <input type="checkbox" id="aj-liberar"></label>
     <div class="acoes" style="margin-top:16px">
       <button class="btn b-fato" style="font-size:16px" onclick="baixarTodos(this)"><span class="emo">📥</span> Salvar sons para usar sem internet</button>
@@ -626,7 +627,7 @@ const SONS={
 };
 
 /* ================= CONFIG ================= */
-const cfg = {tom:1.25, rate:.85, nome:true, caps:true, anim:true, voz:'', vol:.8, cheia:true};
+const cfg = {tela:true, tom:1.25, rate:.85, nome:true, caps:true, anim:true, voz:'', vol:.8, cheia:true};
 try{Object.assign(cfg, JSON.parse(localStorage.getItem('bichos-cfg')||'{}'));}catch(e){}
 function salvar(){try{localStorage.setItem('bichos-cfg',JSON.stringify(cfg));}catch(e){}}
 function aplicar(){document.body.classList.toggle('caps',cfg.caps);document.body.classList.toggle('calm',!cfg.anim);}
@@ -903,7 +904,7 @@ function responder(i){
     rodada.feito = true; acertos++;
     el.classList.add('certo'); anima(el.querySelector('.emo'),'pula'); sininho();
     document.getElementById('fb').textContent = `Isso! ${x.a==='a'?'É a':'É o'} ${x.n}! 🎉`;
-    pararSom(); falar([`Isso! É ${x.a} ${x.n}! Muito bem!`]);
+    pararSom(); falar([`Isso! É ${x.a} ${x.n}! Que lindo jogo!`]);
     document.getElementById('prox').classList.add('show');
     placar();
   } else {
@@ -973,6 +974,7 @@ function abrirAjustes(){
   document.getElementById('aj-caps').checked = cfg.caps;
   document.getElementById('aj-anim').checked = cfg.anim;
   document.getElementById('aj-cheia').checked = cfg.cheia;
+  document.getElementById('aj-tela').checked = cfg.tela;
   document.getElementById('aj-liberar').checked = !!cfg.liberar;
   document.getElementById('ajuda-android').open = /android/i.test(navigator.userAgent) && vozes.length<=2;
   document.getElementById('aj-vol').value = String(cfg.vol);
@@ -984,6 +986,7 @@ function testarVoz(){ falar(['Oi! Eu sou a voz dos Bichos Amigos. Vamos brincar?
 document.getElementById('aj-vel').onchange = e=>{cfg.rate=+e.target.value; salvar(); falar(['Assim está bom?']);};
 document.getElementById('aj-vol').onchange = e=>{cfg.vol=+e.target.value; salvar(); const x=ANIMAIS.find(a=>a.n==='Vaca'); somReal(x);};
 document.getElementById('aj-liberar').onchange = e=>{cfg.liberar=e.target.checked; salvar(); if(document.getElementById('av-mapa').style.display!=='none' && document.getElementById('av').style.display==='block') novaAventura();};
+document.getElementById('aj-tela').onchange = e=>{cfg.tela=e.target.checked; salvar(); cfg.tela ? manterTela() : soltarTela();};
 document.getElementById('aj-cheia').onchange = e=>{cfg.cheia=e.target.checked; salvar(); if(!cfg.cheia) sairTelaCheia();};
 document.getElementById('aj-nome').onchange = e=>{cfg.nome=e.target.checked; salvar();};
 document.getElementById('aj-caps').onchange = e=>{cfg.caps=e.target.checked; salvar(); aplicar();};
@@ -996,6 +999,21 @@ document.addEventListener('pointerdown', ()=>{ try{ ctxAudio(); }catch(e){} }, {
 if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 // salva os sons em segundo plano na primeira visita
 window.addEventListener('load', ()=>{ try{ if(!localStorage.getItem('bichos-sons-ok')){ setTimeout(async()=>{ let ok=0; const l=ANIMAIS.filter(x=>x.au&&!x.au.b64); for(const x of l){ try{ await baixarSom(x.au.url); ok++; }catch(e){} } if(ok===l.length) localStorage.setItem('bichos-sons-ok','1'); }, 3000); } }catch(e){} });
+
+/* ================= TELA SEMPRE LIGADA ================= */
+let travaTela = null;
+async function manterTela(){
+  if(!cfg.tela || !('wakeLock' in navigator) || document.visibilityState!=='visible' || travaTela) return;
+  try{
+    travaTela = await navigator.wakeLock.request('screen');
+    travaTela.addEventListener('release', ()=>{ travaTela = null; });
+  }catch(e){ travaTela = null; }
+}
+function soltarTela(){ try{ travaTela && travaTela.release(); }catch(e){} travaTela = null; }
+// o sistema solta a trava quando o app sai da tela; pega de novo ao voltar
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') manterTela(); });
+document.addEventListener('pointerdown', ()=>manterTela(), true);
+manterTela();
 
 /* ================= TELA CHEIA ================= */
 const raiz = document.documentElement;
@@ -1174,7 +1192,7 @@ function virar(i){
       falar([`Achou! ${ca.x.n}!`], ()=>{
         document.getElementById('mem-fb').textContent = 'Você achou todos os pares! 🎉';
         document.getElementById('mem-fim').classList.add('show');
-        falar(['Muito bem! Você achou todos os pares!']);
+        falar(['Que lindo jogo! Você achou todos os pares!']);
       });
     } else falar([`Achou! ${ca.x.n}!`], ()=>somReal(ca.x));
   } else {
@@ -1349,7 +1367,8 @@ function acertou(el, frase, depois){
   av.passo++;
   const fim = av.passo>=5;
   document.getElementById('av-desafio').insertAdjacentHTML('beforeend',
-    `<button class="btn b-ok grandao" onclick="${fim?'chegarCasa()':'andar()'}">${fim?'Ir para casa':'Continuar'} <span class="emo">▶️</span></button>`);
+    `<button class="btn b-ok grandao" id="av-seguir" onclick="${fim?'chegarCasa()':'andar()'}">${fim?'Ir para casa':'Continuar'} <span class="emo">▶️</span></button>`);
+  setTimeout(()=>{ try{ document.getElementById('av-seguir').scrollIntoView({block:'nearest', behavior: cfg.anim?'smooth':'auto'}); }catch(e){} }, 150);
 }
 function chegarCasa(){
   const cena = document.getElementById('av-cena');
@@ -1364,7 +1383,7 @@ function chegarCasa(){
     document.getElementById('av-desafio').innerHTML = `<h2>Fase ${av.fase+1} completa! 🎉</h2><p class="av-txt">Você ganhou 5 estrelas com ${av.amigo.a} ${av.amigo.n}!</p>
       <div class="acoes">${temProx?`<button class="btn b-ok grandao" onclick="escolherAmigo(${av.fase+1})">Próxima fase <span class="emo">▶️</span></button>`:''}
       <button class="btn cinza grandao" onclick="novaAventura()">Mapa <span class="emo">🗺️</span></button></div>`;
-    falar([temProx ? 'Chegamos em casa! Fase completa! Muito bem!' : 'Você completou todas as fases! Parabéns!'], ()=>somReal(av.amigo));
+    falar([temProx ? 'Chegamos em casa! Fase completa! Que lindo jogo!' : 'Você completou todas as fases! Que lindo jogo!'], ()=>somReal(av.amigo));
   }, cfg.anim ? 1450 : 60);
 }
 
@@ -1606,7 +1625,7 @@ ATIV.quebra = async d => {
       el.style.transform=''; el.style.left = alvoX+'px'; el.style.top = alvoY+'px';
       el.classList.add('posta'); estouro();
       av.qb.faltam--;
-      if(av.qb.faltam===0){ area.querySelector('.tabuleiro').classList.add('pronto'); acertou(null, `Você montou ${alvo.a} ${alvo.n}!`, ()=>somReal(alvo)); }
+      if(av.qb.faltam===0){ area.querySelector('.tabuleiro').classList.add('pronto'); area.style.height = (S + 8) + 'px'; area.style.touchAction = 'auto'; acertou(null, `Você montou ${alvo.a} ${alvo.n}! Que lindo jogo!`, ()=>somReal(alvo)); }
       else falar(['Isso!']);
       return true;
     });
@@ -1665,7 +1684,7 @@ function pintarParte(el){
   document.getElementById('col-pronto').style.visibility = n>0 ? 'visible' : 'hidden';
   if(n===tot) colorirPronto();
 }
-function colorirPronto(){ if(!av.feito) acertou(null, 'Que desenho lindo!'); }
+function colorirPronto(){ if(!av.feito) acertou(null, 'Que lindo jogo!'); }
 
 /* pintar com a cor certa (guiado) */
 const GUIADOS = [

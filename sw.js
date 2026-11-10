@@ -1,5 +1,5 @@
 // Bichos Amigos — funciona sem internet depois da primeira visita
-const APP = 'bichos-app-v6';
+const APP = 'bichos-app-v7';
 const SONS = 'bichos-sons-v1';
 const FONTES = 'bichos-fontes-v1';
 const ARQUIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
