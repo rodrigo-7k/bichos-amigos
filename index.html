@@ -1125,14 +1125,15 @@ function novaMemoria(n){
       <div class="lado rosto" style="--c:${CATS[c.x.c].c}"><span class="emo">${c.x.e}</span><span class="nome">${nomeCurto(c.x)}</span></div></div></button>`).join('');
   document.getElementById('mem-fb').textContent = '';
   document.getElementById('mem-fim').classList.remove('show');
+  window.scrollTo(0,0);
   ajustarMemoria();
   falar(['Ache os pares iguais!']);
 }
 function ajustarMemoria(){
   const g = document.getElementById('mem-grade'); if(!g || !mem.cartas.length) return;
   const n = mem.cartas.length, larg = g.parentElement.clientWidth || window.innerWidth;
-  const top = g.getBoundingClientRect().top + window.scrollY;
-  const altDisp = Math.max(220, window.innerHeight - Math.min(top, window.innerHeight*.45) - 90);
+  const top = Math.max(0, g.getBoundingClientRect().top);
+  const altDisp = Math.max(240, window.innerHeight - Math.min(top, window.innerHeight*.4) - 70);
   const gap = 10;
   let melhor = null;
   for(let cols=2; cols<=n; cols++){
@@ -1701,7 +1702,7 @@ function checarGuia(c){
     document.querySelectorAll(`.desenho .parte[data-id="${p[0]}"]`).forEach(el=>{ el.setAttribute('fill', CORES[c][0]); anima(el,'pinta'); });
     av.guia.k++;
     if(av.guia.k>=av.guia.passos.length){ document.querySelectorAll('.desenho .parte').forEach(el=>el.classList.remove('alvo')); const gg=av.guia; av.guia=null; acertou(null, 'Você pintou tudo com as cores certas!'); }
-    else { marcarGuia(); sininho(); const q=av.guia.passos[av.guia.k]; falar([`Isso! Agora pinte ${q[2]} de ${CORES[q[1]][1].toLowerCase()}!`]); }
+    else { fb(''); marcarGuia(); sininho(); const q=av.guia.passos[av.guia.k]; falar([`Isso! Agora pinte ${q[2]} de ${CORES[q[1]][1].toLowerCase()}!`]); }
   } else {
     falar([`Esse é o ${CORES[c][1].toLowerCase()}. Procure o ${CORES[p[1]][1].toLowerCase()}!`]);
     fb(`Procure o ${CORES[p[1]][1].toLowerCase()} 🙂`);
