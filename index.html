@@ -125,6 +125,61 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 .ajustes input[type=checkbox]{width:26px;height:26px;accent-color:var(--teal)}
 .ajustes small{display:block;color:var(--soft);font-weight:700;font-size:14px;margin-top:14px;text-align:left;line-height:1.4}
 
+/* menu de jogos */
+.menu-jogos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;max-width:900px;margin:10px auto}
+.tile{background:#fff;border-radius:28px;padding:26px 16px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 5px 0 var(--line);border-bottom:10px solid var(--c)}
+.tile:active{transform:scale(.97)}
+.tile .emo{font-size:84px}
+.tile b{font-size:26px;font-weight:900}
+.tile small{font-size:16px;font-weight:700;color:var(--soft)}
+.tela-jogo{display:none;text-align:center}
+.voltar{display:block;margin:0 0 6px;background:#F1EADD;border-radius:999px;padding:10px 18px;font-weight:900;font-size:17px}
+/* memória */
+.niveis{display:flex;gap:8px;justify-content:center;margin:4px 0 14px;flex-wrap:wrap}
+.chip.nivel.on{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 15%,#fff)}
+.mgrade{display:grid;gap:12px;margin:0 auto}
+.mcard{aspect-ratio:3/4;perspective:900px;padding:0}
+.mcard .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
+.mcard.aberta .in,.mcard.achada .in{transform:rotateY(180deg)}
+.mcard .lado{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:0 4px 0 var(--line)}
+.mcard .costas{background:linear-gradient(145deg,var(--accent),#F4A86E)}
+.mcard .costas .emo{font-size:clamp(30px,7vw,52px);opacity:.9}
+.mcard .rosto{background:#fff;transform:rotateY(180deg);border-bottom:8px solid var(--c)}
+.mcard .rosto .emo{font-size:clamp(38px,10vw,72px)}
+.mcard .rosto .nome{font-weight:900;font-size:clamp(11px,2.4vw,16px)}
+.mcard.achada .rosto{box-shadow:0 0 0 5px var(--ok)}
+/* aventura */
+#av h2{font-size:clamp(22px,4.4vw,34px);font-weight:900;margin:8px 0 14px}
+.av-estrelas{font-size:30px;margin:2px 0 8px;letter-spacing:4px}
+.av-cena{position:relative;width:100%;max-width:1000px;margin:0 auto;aspect-ratio:5/2;min-height:200px;border-radius:26px;overflow:hidden;box-shadow:0 4px 0 var(--line)}
+.av-cena svg{position:absolute;inset:0;width:100%;height:100%}
+.av-cena .deco{position:absolute;font-size:clamp(22px,4.5vw,44px);transform:translate(-50%,-100%)}
+.av-cena .deco.p{animation:voa 5s ease-in-out infinite}
+@keyframes voa{50%{transform:translate(-30%,-120%)}}
+.marca{position:absolute;transform:translate(-50%,-50%);width:clamp(28px,5vw,44px);height:clamp(28px,5vw,44px);border-radius:50%;background:#fff;border:4px solid var(--accent);display:grid;place-items:center;font-weight:900;color:var(--accent);font-size:clamp(13px,2.4vw,20px)}
+.marca.feita{border-color:var(--ok);background:#FFF7D6}
+.marca.feita .emo{font-size:clamp(16px,3vw,26px)}
+.casa{position:absolute;transform:translate(-60%,-90%);font-size:clamp(34px,7vw,64px)}
+#av-amigo{position:absolute;transform:translate(-50%,-92%);font-size:clamp(44px,9vw,86px);z-index:2;filter:drop-shadow(0 4px 2px rgba(0,0,0,.15))}
+#av-amigo.andando{animation:passinho .35s ease-in-out infinite}
+@keyframes passinho{50%{margin-top:-8px}}
+.av-perg{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+.av-dest{font-size:clamp(56px,11vw,96px)}
+.ouvir.mini{width:60px;height:60px;font-size:30px}
+.av-op{max-width:720px}
+.av-op .card .emo{font-size:clamp(56px,13vw,100px)}
+.av-op.contar{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.contavel{position:relative;background:#fff;border-radius:24px;width:clamp(80px,18vw,130px);aspect-ratio:1;box-shadow:0 4px 0 var(--line);display:grid;place-items:center}
+.contavel .emo{font-size:clamp(46px,10vw,76px)}
+.contavel.contado{box-shadow:0 0 0 5px var(--ok),0 4px 0 var(--line)}
+.contavel .num{position:absolute;top:-10px;right:-10px;background:var(--ok);color:#fff;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:22px}
+.av-op .card.errado{opacity:.35}
+.av-op .card.certo{box-shadow:0 0 0 6px var(--ok),0 4px 0 var(--line)}
+.b-ok{background:var(--ok);color:#fff}
+.grandao{margin:18px auto 0;font-size:24px;padding:16px 30px}
+.av-txt{font-size:20px;font-weight:800;color:var(--soft)}
+#mem-fim.show{visibility:visible}
+
 /* faixa de instalação */
 #faixa{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:40;background:#fff;border-radius:22px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.15);align-items:center;gap:12px;font-weight:800;font-size:16px;max-width:640px;margin:0 auto}
 #faixa .fx{width:40px;height:40px;border-radius:50%;background:#F1EADD;font-weight:900;flex:0 0 auto}
@@ -145,7 +200,7 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
     <div class="logo"><span class="emo">🐾</span> Bichos Amigos</div>
     <div class="modos" role="tablist">
       <button id="m-exp" class="on" onclick="modo('explorar')"><span class="emo">🔎</span> Explorar</button>
-      <button id="m-jog" onclick="modo('jogo')"><span class="emo">🎲</span> Brincar</button>
+      <button id="m-jog" onclick="modo('jogos')"><span class="emo">🎲</span> Jogos</button>
     </div>
     <button class="mic" onclick="ouvirVoz()" aria-label="Buscar falando"><span class="emo">🎤</span><span class="txt">Falar</span></button>
     <button class="engr" id="bt-cheia" onclick="alternarTelaCheia()" aria-label="Tela cheia"><span class="emo">⛶</span></button>
@@ -163,7 +218,15 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
     <div class="grade" id="grade"></div>
   </section>
 
-  <section id="jogo">
+  <section id="jogos" style="display:none">
+    <div id="menu-jogos" class="menu-jogos">
+      <button class="tile" style="--c:#F4B860" onclick="abrirJogo('som')"><span class="emo">🔊</span><b>Quem faz assim?</b><small>Ouça o som e ache o bicho</small></button>
+      <button class="tile" style="--c:#8CC2E6" onclick="abrirJogo('mem')"><span class="emo">🃏</span><b>Memória</b><small>Ache os pares iguais</small></button>
+      <button class="tile" style="--c:#93C47D" onclick="abrirJogo('av')"><span class="emo">🗺️</span><b>Aventura</b><small>Uma trilha com desafios</small></button>
+    </div>
+
+  <div id="jogo" class="tela-jogo">
+    <button class="voltar" onclick="menuJogos()">◀ Jogos</button>
     <div class="pergunta">
       <h2>Quem faz assim?</h2>
       <button class="ouvir" onclick="tocarRodada()" aria-label="Ouvir de novo"><span class="emo">🔊</span></button>
@@ -172,6 +235,45 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
     <div class="fb" id="fb"></div>
     <button class="btn prox" id="prox" onclick="novaRodada()">Outro <span class="emo">▶️</span></button>
     <div class="placar" id="placar"></div>
+  </div>
+
+  <div id="mem" class="tela-jogo">
+    <button class="voltar" onclick="menuJogos()">◀ Jogos</button>
+    <div class="niveis">
+      <button class="chip nivel" data-n="3" onclick="novaMemoria(3)"><span class="emo">🌱</span>Fácil</button>
+      <button class="chip nivel" data-n="6" onclick="novaMemoria(6)"><span class="emo">🌿</span>Médio</button>
+      <button class="chip nivel" data-n="8" onclick="novaMemoria(8)"><span class="emo">🌳</span>Difícil</button>
+    </div>
+    <div class="mgrade" id="mem-grade"></div>
+    <div class="fb" id="mem-fb"></div>
+    <button class="btn b-ok prox" id="mem-fim" onclick="novaMemoria()">Jogar de novo <span class="emo">🔄</span></button>
+  </div>
+
+  <div id="av" class="tela-jogo">
+    <button class="voltar" onclick="menuJogos()">◀ Jogos</button>
+    <div id="av-escolha"></div>
+    <div id="av-cena-box" style="display:none">
+      <div class="av-estrelas" id="av-estrelas"></div>
+      <div class="av-cena">
+        <svg viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE3F5"/><stop offset="1" stop-color="#E9F6FB"/></linearGradient></defs>
+          <rect width="1000" height="400" fill="url(#ceu)"/>
+          <circle cx="880" cy="70" r="42" fill="#FFD966"/>
+          <g fill="#fff" opacity=".9"><ellipse cx="180" cy="70" rx="60" ry="20"/><ellipse cx="220" cy="58" rx="40" ry="20"/><ellipse cx="560" cy="50" rx="55" ry="17"/><ellipse cx="600" cy="40" rx="35" ry="16"/></g>
+          <path d="M0 210 Q 150 140 300 200 T 600 190 T 1000 180 V400 H0Z" fill="#B5DB95"/>
+          <path d="M0 250 Q 200 200 420 250 T 1000 240 V400 H0Z" fill="#9CCB7B"/>
+          <path id="av-trilha" d="M 10 360 C 120 300, 170 380, 280 330 S 420 250, 520 300 S 680 380, 760 310 S 900 250, 985 280" fill="none" stroke="#E9D3A6" stroke-width="34" stroke-linecap="round"/>
+          <path d="M 10 360 C 120 300, 170 380, 280 330 S 420 250, 520 300 S 680 380, 760 310 S 900 250, 985 280" fill="none" stroke="#F5E6C4" stroke-width="22" stroke-linecap="round" stroke-dasharray="2 26"/>
+        </svg>
+        <span class="emo deco" style="left:6%;top:47%">🌳</span><span class="emo deco" style="left:22%;top:56%">🌻</span>
+        <span class="emo deco" style="left:40%;top:44%">🌲</span><span class="emo deco" style="left:60%;top:52%">🌷</span>
+        <span class="emo deco" style="left:78%;top:44%">🌳</span><span class="emo deco p" style="left:47%;top:20%">🦋</span>
+        <div id="av-marcas"></div>
+        <span class="emo" id="av-amigo"></span>
+      </div>
+    </div>
+    <div id="av-desafio"></div>
+  </div>
   </section>
 </main>
 
@@ -204,7 +306,15 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 <div class="ov" id="ov-aj" onclick="if(event.target===this)fecharOv('ov-aj')">
   <div class="painel ajustes">
     <h3>Ajustes</h3>
-    <label>Voz <select id="aj-voz"></select></label>
+    <label>Tipo de voz
+      <select id="aj-tom">
+        <option value="1.5">Criança</option>
+        <option value="1.25">Jovem</option>
+        <option value="1">Adulta</option>
+      </select>
+    </label>
+    <label>Voz do aparelho <select id="aj-voz"></select></label>
+    <div class="acoes" style="margin:10px 0 4px"><button class="btn b-som" style="font-size:16px" onclick="testarVoz()"><span class="emo">🗣️</span> Testar voz</button></div>
     <label>Velocidade da fala
       <select id="aj-vel">
         <option value="0.7">Bem devagar</option>
@@ -396,7 +506,7 @@ const SONS={
 };
 
 /* ================= CONFIG ================= */
-const cfg = {rate:.85, nome:true, caps:true, anim:true, voz:'', vol:.8, cheia:true};
+const cfg = {tom:1.25, rate:.85, nome:true, caps:true, anim:true, voz:'', vol:.8, cheia:true};
 try{Object.assign(cfg, JSON.parse(localStorage.getItem('bichos-cfg')||'{}'));}catch(e){}
 function salvar(){try{localStorage.setItem('bichos-cfg',JSON.stringify(cfg));}catch(e){}}
 function aplicar(){document.body.classList.toggle('caps',cfg.caps);document.body.classList.toggle('calm',!cfg.anim);}
@@ -409,10 +519,10 @@ function carregarVozes(){
   if(!synth) return;
   vozes = synth.getVoices().filter(v=>/^pt/i.test(v.lang));
   const br = vozes.filter(v=>/pt[-_]BR/i.test(v.lang));
-  const pref = ['Francisca','Luciana','Thalita','Google','Maria','Daniel'];
+  const pref = ['Thalita','Francisca','Luciana','Google','Maria','Daniel'];
   voz = vozes.find(v=>v.name===cfg.voz) || pref.map(p=>br.find(v=>v.name.includes(p))).find(Boolean) || br[0] || vozes[0] || null;
   const sel = document.getElementById('aj-voz');
-  sel.innerHTML = vozes.length ? vozes.map(v=>`<option ${voz&&v.name===voz.name?'selected':''}>${v.name}</option>`).join('') : '<option>Voz padrão</option>';
+  sel.innerHTML = vozes.length ? vozes.map(v=>`<option value="${v.name}" ${voz&&v.name===voz.name?'selected':''}>${v.name.replace(/^Microsoft /,'').replace(/ Online \(Natural\)/,' ✨').replace(/ - Portuguese \(Brazil\)| - Portuguese \(Portugal\)/,'')}${/BR/i.test(v.lang)?'':' (Portugal)'}</option>`).join('') : '<option>Voz padrão</option>';
 }
 if(synth){carregarVozes(); synth.onvoiceschanged = carregarVozes;}
 const lim=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -425,7 +535,7 @@ function falar(partes, fim){
       if(typeof x==='string') x={txt:x};
       const u = new SpeechSynthesisUtterance(x.txt);
       u.lang = voz ? voz.lang : 'pt-BR'; if(voz) u.voice = voz;
-      u.pitch = lim(x.p ?? 1, 0, 2); u.rate = lim(cfg.rate*(x.r ?? 1), .3, 1.6);
+      u.pitch = lim((x.p ?? 1) * cfg.tom, 0, 2); u.rate = lim(cfg.rate*(x.r ?? 1), .3, 1.6);
       if(idx===partes.length-1 && fim){ let feito=false; const f=()=>{if(!feito){feito=true;fim();}}; u.onend=f; u.onerror=f; setTimeout(f, 6000); }
       synth.speak(u);
     });
@@ -647,10 +757,10 @@ document.addEventListener('keydown',e=>{
 let rodada = null, acertos = 0;
 function modo(m){
   document.getElementById('m-exp').classList.toggle('on', m==='explorar');
-  document.getElementById('m-jog').classList.toggle('on', m==='jogo');
+  document.getElementById('m-jog').classList.toggle('on', m==='jogos');
   document.getElementById('explorar').style.display = m==='explorar'?'':'none';
-  document.getElementById('jogo').style.display = m==='jogo'?'block':'none';
-  if(m==='jogo') novaRodada(); else { if(synth) synth.cancel(); pararSom(); }
+  document.getElementById('jogos').style.display = m==='jogos'?'block':'none';
+  if(m==='jogos') menuJogos(); else { if(synth) synth.cancel(); pararSom(); }
 }
 const sortear = arr => arr[Math.floor(Math.random()*arr.length)];
 function embaralhar(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
@@ -738,6 +848,7 @@ function escolheuVoz(i){ fecharVoz(); abrir(i, ANIMAIS.slice()); }
 /* ================= AJUSTES ================= */
 function abrirAjustes(){
   document.getElementById('aj-vel').value = String(cfg.rate);
+  document.getElementById('aj-tom').value = String(cfg.tom);
   document.getElementById('aj-nome').checked = cfg.nome;
   document.getElementById('aj-caps').checked = cfg.caps;
   document.getElementById('aj-anim').checked = cfg.anim;
@@ -746,6 +857,8 @@ function abrirAjustes(){
   carregarVozes();
   document.getElementById('ov-aj').classList.add('show');
 }
+document.getElementById('aj-tom').onchange = e=>{cfg.tom=+e.target.value; salvar(); testarVoz();};
+function testarVoz(){ falar(['Oi! Eu sou a voz dos Bichos Amigos. Vamos brincar?']); }
 document.getElementById('aj-vel').onchange = e=>{cfg.rate=+e.target.value; salvar(); falar(['Assim está bom?']);};
 document.getElementById('aj-vol').onchange = e=>{cfg.vol=+e.target.value; salvar(); const x=ANIMAIS.find(a=>a.n==='Vaca'); somReal(x);};
 document.getElementById('aj-cheia').onchange = e=>{cfg.cheia=e.target.checked; salvar(); if(!cfg.cheia) sairTelaCheia();};
@@ -784,6 +897,321 @@ document.addEventListener('click', e=>{
   entrarTelaCheia();
 }, true);
 if(!podeCheia) document.getElementById('bt-cheia').style.display='none';
+
+/* Curiosidades extras (somadas às que já existem em cada bicho) */
+const FATOS_EXTRA = {
+ 'Cachorro':['O cachorro escuta sons que a gente não consegue ouvir.','O nariz de cada cachorro tem um desenho diferente, como a nossa digital.','O cachorro sua pelas almofadinhas das patas.'],
+ 'Gato':['O gato usa os bigodes para saber se cabe num buraco.','O gato quase sempre cai de pé.','O gato enxerga muito bem no escuro.'],
+ 'Vaca':['A barriga da vaca tem quatro partes para digerir o capim.','A vaca gosta de ficar perto das amigas.','A vaca bebe muita água todos os dias.'],
+ 'Porco':['O nariz do porco se chama focinho e fareja muito bem.','O porco quase não sua, por isso gosta de lama.','Os filhotes do porco se chamam leitões.'],
+ 'Cavalo':['O filhote do cavalo se chama potro.','O potro consegue ficar em pé logo depois de nascer.','O cavalo pode viver uns trinta anos.'],
+ 'Ovelha':['A ovelha reconhece o rosto das amigas.','O filhote da ovelha se chama cordeiro.','A lã da ovelha não para de crescer e precisa ser cortada.'],
+ 'Cabra':['A cabra também dá leite.','O filhote da cabra se chama cabrito.','A cabra é muito curiosa.'],
+ 'Galinha':['A galinha choca os ovos para os pintinhos nascerem.','A galinha conversa com os pintinhos ainda dentro do ovo.','A galinha toma banho de terra para ficar limpinha.'],
+ 'Galo':['O galo chama as galinhas quando acha comida.','O galo canta para avisar que aquele lugar é dele.','O galo tem penas compridas e coloridas no rabo.'],
+ 'Pato':['O pato tem uma pele entre os dedos, como um pé de pato de nadar.','Os patinhos andam em fila atrás da mãe.','Muitos patos conseguem voar.'],
+ 'Pintinho':['O pintinho tem um dentinho no bico só para quebrar o ovo.','O pintinho fica quentinho embaixo das asas da mãe.','O pintinho cresce e vira galinha ou galo.'],
+ 'Coelho':['O coelho pula e gira quando está feliz.','O coelho come capim, folhas e cenoura.','Os filhotes do coelho nascem sem pelo e de olhinhos fechados.'],
+ 'Rato':['O rato tem dentes que não param de crescer.','O rato usa o rabo comprido para se equilibrar.','O rato tem um faro muito bom.'],
+ 'Peru':['O peru consegue mudar a cor da cabeça.','Quem faz glu glu é o peru macho.','O peru selvagem consegue voar.'],
+ 'Alpaca':['A alpaca é prima da lhama.','A alpaca vive em grupo.','A alpaca faz um som parecido com um zumbido: hummm.'],
+ 'Búfalo':['O búfalo tem chifres grandes e curvados.','O búfalo é muito forte.','O búfalo gosta de lugares com bastante água.'],
+ 'Porquinho-da-índia':['O porquinho-da-índia gosta de viver com amigos.','Os dentes do porquinho-da-índia não param de crescer.','Quando está feliz, o porquinho-da-índia dá pulinhos.'],
+ 'Iaque':['O iaque dá leite e lã.','O iaque vive em lugares bem frios e altos.','Com o pelo comprido, o iaque não sente frio na neve.'],
+ 'Leão':['O leão vive em família, com leoas e filhotes.','A leoa é quem mais caça.','O leão dorme quase o dia todo.'],
+ 'Tigre':['O tigre é o maior gato do mundo.','As listras ajudam o tigre a se esconder no mato.','O tigre gosta de viver sozinho.'],
+ 'Elefante':['As orelhas grandes do elefante funcionam como um leque.','O elefante tem uma memória muito boa.','O filhote do elefante às vezes chupa a tromba, como a gente chupa o dedo.'],
+ 'Macaco':['Os macacos cuidam dos amigos tirando sujeirinhas do pelo.','Os macacos vivem em grupos.','No Brasil tem muitos macacos, como o mico-leão-dourado.'],
+ 'Girafa':['A girafa dorme muito pouquinho.','As manchas de cada girafa têm um desenho diferente.','O filhote da girafa já nasce bem alto.'],
+ 'Zebra':['As listras da zebra ajudam a espantar as moscas.','A zebra é parente do cavalo.','A zebra consegue dormir em pé.'],
+ 'Hipopótamo':['O hipopótamo não nada direito: ele anda no fundo da água.','A pele do hipopótamo solta um líquido que protege do sol.','O hipopótamo sai da água de noite para comer capim.'],
+ 'Rinoceronte':['O rinoceronte enxerga pouco, mas escuta e cheira muito bem.','O rinoceronte gosta de rolar na lama.','O rinoceronte come só plantas.'],
+ 'Gorila':['O gorila é o maior macaco do mundo.','Todo dia o gorila faz uma caminha de folhas para dormir.','O gorila anda apoiado nos dedos das mãos.'],
+ 'Camelo':['O camelo tem cílios compridos que protegem os olhos da areia.','O camelo consegue fechar o nariz quando venta.','O camelo vive no deserto.'],
+ 'Canguru':['O canguru usa o rabo para se equilibrar.','O canguru vive na Austrália.','O canguru não consegue andar para trás.'],
+ 'Coala':['O coala vive na Austrália.','O coala quase não bebe água: ele pega a água das folhas.','O filhote do coala fica numa bolsinha na barriga da mãe.'],
+ 'Panda':['O panda vive na China.','O panda tem um dedinho a mais para segurar o bambu.','O filhote do panda nasce bem pequenininho.'],
+ 'Onça':['A onça-pintada é o maior gato das Américas.','Cada onça tem pintas diferentes.','A onça gosta de ficar perto dos rios.'],
+ 'Preguiça':['A preguiça só desce da árvore uma vez por semana, para fazer cocô.','A preguiça nada bem.','A preguiça dorme muitas horas por dia.'],
+ 'Urso':['O urso-polar é branco e vive no gelo.','O urso fica em pé nas patas de trás para olhar longe.','O urso tem um faro muito bom.'],
+ 'Lobo':['O lobo é parente do cachorro.','O lobo enxerga bem no escuro.','O lobo consegue correr por muito tempo sem parar.'],
+ 'Raposa':['A raposa usa o rabo como cobertor no frio.','A raposa pula bem alto para pegar comida.','A raposa mora numa toca.'],
+ 'Veado':['O filhote do veado tem manchinhas brancas.','O veado come folhas e frutas.','O veado escuta muito bem com as orelhas grandes.'],
+ 'Esquilo':['O esquilo às vezes esquece onde guardou as nozes, e delas nascem árvores!','O esquilo usa o rabo para se equilibrar.','O esquilo segura a comida com as mãozinhas.'],
+ 'Ouriço':['O ouriço come insetos e minhocas.','O ouriço sai mais de noite.','O filhote do ouriço nasce com espinhos moles.'],
+ 'Morcego':['O morcego é o único mamífero que voa.','Muitos morcegos comem frutas e ajudam a plantar árvores.','O morcego se guia pelo eco dos sons que ele faz.'],
+ 'Alce':['O alce é o maior veado do mundo.','Os chifres do alce caem todo ano e nascem de novo.','O alce vive em lugares frios.'],
+ 'Guaxinim':['O guaxinim tem mãozinhas muito habilidosas.','O guaxinim sai mais de noite.','O guaxinim tem o rabo listrado.'],
+ 'Coruja':['A coruja voa sem fazer barulho.','A coruja come ratinhos e insetos.','A coruja dorme de dia e acorda de noite.'],
+ 'Águia':['A águia faz o ninho bem alto, em árvores ou montanhas.','A águia tem garras muito fortes.','A águia plana no céu quase sem bater as asas.'],
+ 'Papagaio':['O papagaio vive muitos anos.','O papagaio segura a comida com o pé.','O papagaio usa o bico para subir nos galhos.'],
+ 'Pinguim':['O papai pinguim ajuda a cuidar do ovo.','O pinguim escorrega de barriga no gelo.','O pinguim tem penas bem juntinhas que esquentam.'],
+ 'Flamingo':['O flamingo come com a cabeça virada de cabeça para baixo.','Os flamingos vivem em grupos enormes.','O filhote do flamingo nasce cinza.'],
+ 'Pavão':['Só o pavão macho tem o leque colorido.','A fêmea do pavão se chama pavoa.','O pavão voa para subir nas árvores.'],
+ 'Cisne':['O cisne pode ficar a vida toda com o mesmo par.','O filhote do cisne é cinzinha.','O cisne nada usando as patas como remo.'],
+ 'Pomba':['A pomba bebe água sugando, como num canudinho.','A pomba vive nas cidades e no campo.','O pombo balança a cabeça quando anda.'],
+ 'Passarinho':['O passarinho canta para chamar os amigos.','O sabiá-laranjeira é um passarinho do Brasil.','O passarinho tem ossos leves para conseguir voar.'],
+ 'Corvo':['O corvo usa gravetos como ferramenta.','O corvo lembra do rosto das pessoas.','O corvo conversa com outros corvos.'],
+ 'Sapo':['O sapo bebe água pela pele.','O sapo pula muito longe.','O sapo canta mais quando chove.'],
+ 'Cobra':['A cobra troca de pele quando cresce.','A cobra engole a comida inteira.','Cobra a gente só olha de longe!'],
+ 'Tartaruga':['A tartaruga não tem dentes: ela tem um bico.','A tartaruga marinha bota ovos na areia da praia.','Muitas tartarugas escondem a cabeça dentro do casco.'],
+ 'Jacaré':['O jacaré gosta de tomar sol.','A mamãe jacaré carrega os filhotes na boca.','Tem muitos jacarés no Pantanal, aqui no Brasil.'],
+ 'Lagarto':['O lagarto troca de pele.','O lagarto come insetos.','A lagartixa consegue subir nas paredes.'],
+ 'Dinossauro':['Alguns dinossauros eram do tamanho de uma galinha.','Os passarinhos são parentes dos dinossauros.','A gente conhece os dinossauros pelos ossos, que se chamam fósseis.'],
+ 'Dinossauro pescoçudo':['Ele foi um dos animais mais pesados que já existiram.','Ele andava em quatro patas bem grossas.','Ele comia só plantas.'],
+ 'Abelha':['As abelhas dançam para mostrar às amigas onde tem flores.','A abelha tem cinco olhos.','As abelhas moram juntas na colmeia.'],
+ 'Borboleta':['A borboleta sente o gosto com os pés.','As asas da borboleta têm escamas pequenininhas.','A borboleta precisa de sol para voar.'],
+ 'Joaninha':['A joaninha come pulgões, que estragam as plantas.','Quando fica com medo, a joaninha se finge de morta.','A joaninha tem asas escondidas embaixo da casquinha.'],
+ 'Formiga':['As formigas conversam pelo cheiro.','Cada formigueiro tem uma rainha.','As formigas andam em fila seguindo um cheirinho.'],
+ 'Caracol':['O caracol tem os olhos na ponta das anteninhas.','O caracol deixa um caminho de gosma.','O caracol gosta de lugares molhados.'],
+ 'Aranha':['A teia da aranha é muito forte.','A aranha come insetos que ficam presos na teia.','Muitas aranhas têm oito olhos.'],
+ 'Escorpião':['O escorpião brilha no escuro com uma luz especial.','O escorpião sai mais de noite.','A mamãe escorpião carrega os filhotes nas costas.'],
+ 'Grilo':['O grilo escuta com as pernas da frente.','O grilo canta mais de noite.','Só o grilo macho canta.'],
+ 'Peixe':['O peixe tem o corpo coberto de escamas.','O peixe usa as nadadeiras para nadar.','Tem peixe de muitas cores diferentes.'],
+ 'Tubarão':['O tubarão existe desde antes dos dinossauros.','O tubarão sente cheiro de muito longe.','O tubarão-baleia é o maior peixe do mundo.'],
+ 'Golfinho':['O golfinho respira ar por um buraquinho no alto da cabeça.','O golfinho dorme com metade do cérebro de cada vez.','Cada golfinho tem um assobio que é como o seu nome.'],
+ 'Baleia':['A baleia respira ar, como a gente.','O filhote da baleia toma leite da mãe.','A baleia canta músicas que dá para ouvir de longe.'],
+ 'Polvo':['O polvo tem três corações.','O polvo é muito inteligente.','O polvo consegue passar por buraquinhos bem pequenos.'],
+ 'Caranguejo':['O caranguejo troca de casca quando cresce.','O caranguejo tem dez patas.','O caranguejo cava buracos na areia.'],
+ 'Foca':['A foca fica muito tempo embaixo da água.','A foca tem uma camada de gordura que esquenta.','O filhote da foca é bem fofinho.'],
+ 'Lontra':['A lontra-marinha tem o pelo mais grosso de todos os bichos.','A lontra-marinha usa pedras para abrir conchas.','A lontra-marinha guarda comida num bolsinho embaixo do braço.']
+};
+ANIMAIS.forEach(x=>{ (FATOS_EXTRA[x.n]||[]).forEach(f=>x.f.push(f)); });
+
+/* ================= MENU DE JOGOS ================= */
+const TELAS_JOGO = ['jogo','mem','av'];
+function menuJogos(){
+  pararSom(); if(synth) synth.cancel();
+  TELAS_JOGO.forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('menu-jogos').style.display='';
+}
+function abrirJogo(j){
+  document.getElementById('menu-jogos').style.display='none';
+  TELAS_JOGO.forEach(id=>document.getElementById(id).style.display='none');
+  const id = j==='som' ? 'jogo' : j;
+  document.getElementById(id).style.display='block';
+  if(j==='som') novaRodada();
+  if(j==='mem') novaMemoria();
+  if(j==='av') novaAventura();
+}
+function nomeCurto(x){ return x.n.split(' ')[0]; }
+
+/* ================= MEMÓRIA ================= */
+const mem = {cartas:[], abertas:[], trava:false, pares:0, total:0, nivel:3};
+function novaMemoria(n){
+  if(n) mem.nivel = n;
+  document.querySelectorAll('#mem .nivel').forEach(b=>b.classList.toggle('on', +b.dataset.n===mem.nivel));
+  const pool = embaralhar(ANIMAIS.filter(x=>x.au)).slice(0, mem.nivel);
+  mem.cartas = embaralhar([...pool, ...pool]).map(x=>({x, estado:''}));
+  mem.abertas = []; mem.trava = false; mem.pares = 0; mem.total = mem.nivel;
+  const cols = mem.nivel<=3 ? 3 : 4;
+  const g = document.getElementById('mem-grade');
+  g.style.gridTemplateColumns = `repeat(${cols}, minmax(0,1fr))`;
+  g.style.maxWidth = mem.nivel<=3 ? '520px' : '640px';
+  g.innerHTML = mem.cartas.map((c,i)=>`<button class="mcard" data-i="${i}" onclick="virar(${i})" aria-label="Carta ${i+1}">
+      <div class="in"><div class="lado costas"><span class="emo">🐾</span></div>
+      <div class="lado rosto" style="--c:${CATS[c.x.c].c}"><span class="emo">${c.x.e}</span><span class="nome">${nomeCurto(c.x)}</span></div></div></button>`).join('');
+  document.getElementById('mem-fb').textContent = '';
+  document.getElementById('mem-fim').classList.remove('show');
+  falar(['Ache os pares iguais!']);
+}
+function cartaEl(i){ return document.querySelector(`#mem-grade .mcard[data-i="${i}"]`); }
+function virar(i){
+  const c = mem.cartas[i];
+  if(mem.trava || c.estado) return;
+  c.estado='aberta'; cartaEl(i).classList.add('aberta');
+  mem.abertas.push(i);
+  if(mem.abertas.length===1){ falar([c.x.n]); return; }
+  const [a,b] = mem.abertas; mem.abertas = [];
+  const ca = mem.cartas[a], cb = mem.cartas[b];
+  if(ca.x===cb.x){
+    ca.estado = cb.estado = 'achada';
+    [a,b].forEach(k=>{ const el=cartaEl(k); el.classList.add('achada'); anima(el.querySelector('.rosto .emo'),'pula'); });
+    mem.pares++;
+    sininho();
+    document.getElementById('mem-fb').textContent = `Achou! ${ca.x.e} ${ca.x.n}`;
+    if(mem.pares===mem.total){
+      falar([`Achou! ${ca.x.n}!`], ()=>{
+        document.getElementById('mem-fb').textContent = 'Você achou todos os pares! 🎉';
+        document.getElementById('mem-fim').classList.add('show');
+        falar(['Muito bem! Você achou todos os pares!']);
+      });
+    } else falar([`Achou! ${ca.x.n}!`], ()=>somReal(ca.x));
+  } else {
+    mem.trava = true;
+    falar([cb.x.n]);
+    setTimeout(()=>{
+      [a,b].forEach(k=>{ mem.cartas[k].estado=''; cartaEl(k).classList.remove('aberta'); });
+      mem.trava = false;
+    }, 1400);
+  }
+}
+
+/* ================= AVENTURA ================= */
+const COMIDAS = {
+  'Coelho':['🥕','cenoura'], 'Macaco':['🍌','banana'], 'Cachorro':['🦴','osso'], 'Gato':['🐟','peixe'],
+  'Rato':['🧀','queijo'], 'Abelha':['🌻','flor'], 'Panda':['🎋','bambu'], 'Vaca':['🌿','capim'],
+  'Urso':['🍯','mel'], 'Esquilo':['🌰','noz'], 'Galinha':['🌽','milho'], 'Coala':['🍃','folhas'],
+  'Elefante':['🍉','melancia'], 'Passarinho':['🌾','sementes'], 'Pinguim':['🐟','peixe'], 'Cavalo':['🍎','maçã']
+};
+const CASAS = { fazenda:['🏡','Fazenda'], mar:['🌊','Mar'], selva:['🌴','Selva'] };
+const GRANDES = ['Elefante','Baleia','Girafa','Hipopótamo','Rinoceronte','Urso','Cavalo','Camelo'];
+const PEQUENOS = ['Rato','Formiga','Joaninha','Abelha','Pintinho','Caracol','Sapo','Borboleta'];
+const CONTAR = [['🐤','pintinhos','m'],['🦆','patos','m'],['🐟','peixinhos','m'],['🐸','sapos','m'],['🐞','joaninhas','f'],['🐝','abelhas','f'],['🐰','coelhos','m'],['🐌','caracóis','m'],['🍎','maçãs','f'],['⭐','estrelas','f']];
+const NUM_M = ['zero','um','dois','três','quatro','cinco'], NUM_F = ['zero','uma','duas','três','quatro','cinco'];
+const AMIGOS = ['Cachorro','Gato','Coelho','Pinguim','Panda','Leão'];
+const av = {amigo:null, passo:0, estrelas:0, desafios:[], pontos:[], fala:[], feito:false};
+const bicho = n => ANIMAIS.find(a=>a.n===n);
+
+function novaAventura(){
+  document.getElementById('av-cena-box').style.display='none';
+  document.getElementById('av-desafio').innerHTML = '';
+  const esc = embaralhar(AMIGOS.slice()).slice(0,3).map(bicho);
+  const el = document.getElementById('av-escolha');
+  el.style.display='';
+  el.innerHTML = `<h2>Quem vai com você na aventura?</h2><div class="opcoes">${esc.map(x=>`<button class="card" style="--c:${CATS[x.c].c}" onclick="comecarAventura(${x.i})"><span class="emo">${x.e}</span><span class="nome">${x.n}</span></button>`).join('')}</div>`;
+  falar(['Quem vai com você na aventura?']);
+}
+function comecarAventura(i){
+  av.amigo = ANIMAIS[i]; av.passo = 0; av.estrelas = 0;
+  av.desafios = embaralhar(['comida','casa','contar','tamanho','som']);
+  document.getElementById('av-escolha').style.display='none';
+  document.getElementById('av-cena-box').style.display='';
+  const amigo = document.getElementById('av-amigo');
+  amigo.textContent = av.amigo.e;
+  // pontos da trilha calculados no próprio caminho do desenho
+  const path = document.getElementById('av-trilha'), L = path.getTotalLength();
+  av.pontos = [.04,.18,.36,.54,.72,.88,.98].map(f=>{ const p=path.getPointAtLength(L*f); return [p.x/10, p.y/4]; });
+  const marcas = document.getElementById('av-marcas');
+  marcas.innerHTML = av.pontos.slice(1,6).map((p,k)=>`<div class="marca" id="av-m${k}" style="left:${p[0]}%;top:${p[1]}%">${k+1}</div>`).join('')
+    + `<div class="casa emo" style="left:${av.pontos[6][0]}%;top:${av.pontos[6][1]}%">🏠</div>`;
+  posicionar(0, false);
+  pintarEstrelas();
+  document.getElementById('av-desafio').innerHTML = `<button class="btn b-som grandao" onclick="andar()">Vamos! <span class="emo">▶️</span></button>`;
+  falar([`Oba! Vamos com ${av.amigo.a} ${av.amigo.n}! Toque em Vamos.`]);
+}
+function posicionar(k, animar){
+  const el = document.getElementById('av-amigo'), p = av.pontos[k];
+  el.classList.toggle('andando', !!animar && cfg.anim);
+  el.style.transition = (animar && cfg.anim) ? 'left 1.4s ease-in-out, top 1.4s ease-in-out' : 'none';
+  el.style.left = p[0]+'%'; el.style.top = p[1]+'%';
+}
+function pintarEstrelas(){
+  document.getElementById('av-estrelas').innerHTML = [0,1,2,3,4].map(k=>`<span class="emo" style="opacity:${k<av.estrelas?1:.25}">⭐</span>`).join('');
+}
+function andar(){
+  document.getElementById('av-desafio').innerHTML = '';
+  posicionar(av.passo+1, true);
+  setTimeout(()=>{ document.getElementById('av-amigo').classList.remove('andando'); desafio(av.desafios[av.passo]); }, cfg.anim ? 1450 : 50);
+}
+function painel(pergunta, destaque, opcoesHTML, fala){
+  av.fala = fala; av.feito = false;
+  document.getElementById('av-desafio').innerHTML = `
+    <div class="av-perg">${destaque?`<span class="emo av-dest">${destaque}</span>`:''}<h2>${pergunta}</h2>
+    <button class="ouvir mini" onclick="repetirDesafio()" aria-label="Ouvir de novo"><span class="emo">🔊</span></button></div>
+    <div class="opcoes av-op">${opcoesHTML}</div><div class="fb" id="av-fb"></div>`;
+  repetirDesafio();
+}
+function repetirDesafio(){ if(typeof av.fala==='function') av.fala(); else falar(av.fala); }
+function opcaoHTML(emo, nome, acao, cor){ return `<button class="card" style="--c:${cor||'#F4B860'}" onclick="${acao}"><span class="emo">${emo}</span><span class="nome">${nome}</span></button>`; }
+
+function desafio(tipo){
+  if(tipo==='comida'){
+    const nomes = Object.keys(COMIDAS), alvo = bicho(sortear(nomes)), certo = COMIDAS[alvo.n];
+    const outras = embaralhar(Object.values(COMIDAS).filter(c=>c[0]!==certo[0]).filter((c,k,arr)=>arr.findIndex(z=>z[0]===c[0])===k)).slice(0,2);
+    av.resp = certo[0];
+    const ops = embaralhar([certo, ...outras]);
+    painel(`${cap(alvo.a)} ${alvo.n} está com fome! O que ${alvo.a==='a'?'ela':'ele'} come?`, alvo.e,
+      ops.map(c=>opcaoHTML(c[0], c[1], `respComida(this,'${c[0]}','${c[1]}',${alvo.i})`)).join(''),
+      [`${cap(alvo.a)} ${alvo.n} está com fome! O que ${alvo.a==='a'?'ela':'ele'} come?`]);
+  }
+  if(tipo==='casa'){
+    const alvo = sortear(ANIMAIS.filter(x=>CASAS[x.c] && x.n!=='Dinossauro pescoçudo'));
+    av.resp = alvo.c;
+    painel(`Onde ${alvo.a} ${alvo.n} mora?`, alvo.e,
+      Object.entries(CASAS).map(([k,c])=>opcaoHTML(c[0], c[1], `respCasa(this,'${k}',${alvo.i})`, CATS[k].c)).join(''),
+      [`Onde ${alvo.a} ${alvo.n} mora? Na fazenda, no mar, ou na selva?`]);
+  }
+  if(tipo==='contar'){
+    const [emo, plural, gen] = sortear(CONTAR), n = 2 + Math.floor(Math.random()*4);
+    av.cont = {n, feitos:0, plural, gen};
+    painel(`Vamos contar ${gen==='f'?'as':'os'} ${plural}? Toque em cada um!`, '',
+      Array.from({length:n},(_,k)=>`<button class="contavel" onclick="contar(this)"><span class="emo">${emo}</span></button>`).join(''),
+      [`Vamos contar ${gen==='f'?'as':'os'} ${plural}? Toque em cada um!`]);
+    document.querySelector('#av-desafio .av-op').classList.add('contar');
+  }
+  if(tipo==='tamanho'){
+    const g = bicho(sortear(GRANDES)), p = bicho(sortear(PEQUENOS)), maior = Math.random()<.5;
+    av.resp = maior ? g.i : p.i; av.tam = maior ? 'maior' : 'menor';
+    painel(`Quem é ${maior?'MAIOR':'MENOR'}?`, '',
+      embaralhar([g,p]).map(x=>opcaoHTML(x.e, x.n, `respTamanho(this,${x.i})`, CATS[x.c].c)).join(''),
+      [`Quem é ${av.tam}? ${cap(g.a)} ${g.n}, ou ${p.a} ${p.n}?`]);
+  }
+  if(tipo==='som'){
+    const comSom = ANIMAIS.filter(x=>x.au && !x.q), alvo = sortear(comSom);
+    const outros = embaralhar(comSom.filter(x=>x!==alvo)).slice(0,2);
+    av.resp = alvo.i;
+    painel('Quem faz esse som?', '',
+      embaralhar([alvo,...outros]).map(x=>opcaoHTML(x.e, x.n, `respSom(this,${x.i})`, CATS[x.c].c)).join(''),
+      ()=>{ pararSom(); falar(['Quem faz esse som?'], ()=>somReal(alvo)); });
+  }
+}
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+function errou(el, frase){ el.classList.add('errado'); document.getElementById('av-fb').textContent='Tenta outro! 🙂'; pararSom(); falar([frase]); }
+function respComida(el, emo, nome, i){
+  if(av.feito) return; const x = ANIMAIS[i];
+  if(emo===av.resp) acertou(el, `Isso! ${cap(x.a)} ${x.n} come ${nome}!`);
+  else errou(el, `Hmm, ${x.a} ${x.n} não come ${nome}. Tenta outro!`);
+}
+function respCasa(el, k, i){
+  if(av.feito) return; const x = ANIMAIS[i];
+  const onde = {fazenda:'na fazenda', mar:'no mar', selva:'na selva'};
+  if(k===av.resp) acertou(el, `Isso! ${cap(x.a)} ${x.n} mora ${onde[k]}!`);
+  else errou(el, `Hmm, não é ${onde[k]}. Tenta outro!`);
+}
+function respTamanho(el, i){
+  if(av.feito) return; const x = ANIMAIS[i];
+  if(i===av.resp) acertou(el, `Isso! ${cap(x.a)} ${x.n} é ${av.tam}!`);
+  else errou(el, `Hmm, ${x.a} ${x.n} não é ${av.tam}. Tenta o outro!`);
+}
+function respSom(el, i){
+  if(av.feito) return; const x = ANIMAIS[i];
+  if(i===av.resp) acertou(el, `Isso! É ${x.a} ${x.n}!`);
+  else errou(el, `Esse é ${x.a} ${x.n}. Tenta outro!`);
+}
+function contar(el){
+  if(av.feito || el.classList.contains('contado')) return;
+  el.classList.add('contado'); av.cont.feitos++;
+  const k = av.cont.feitos, nomes = av.cont.gen==='f' ? NUM_F : NUM_M;
+  el.insertAdjacentHTML('beforeend', `<span class="num">${k}</span>`);
+  anima(el.querySelector('.emo'),'pula');
+  if(k===av.cont.n) acertou(null, `${cap(nomes[k])}! São ${nomes[k]} ${av.cont.plural}!`);
+  else falar([cap(nomes[k])]);
+}
+function acertou(el, frase){
+  av.feito = true;
+  if(el){ el.classList.add('certo'); anima(el.querySelector('.emo'),'pula'); }
+  sininho(); pararSom();
+  av.estrelas++; pintarEstrelas();
+  const m = document.getElementById('av-m'+av.passo); if(m){ m.classList.add('feita'); m.innerHTML='<span class="emo">⭐</span>'; }
+  document.getElementById('av-fb').textContent = '⭐ ' + frase;
+  falar([frase]);
+  av.passo++;
+  const fim = av.passo>=5;
+  document.getElementById('av-desafio').insertAdjacentHTML('beforeend',
+    `<button class="btn b-ok grandao" onclick="${fim?'chegarCasa()':'andar()'}">${fim?'Ir para casa':'Continuar'} <span class="emo">▶️</span></button>`);
+}
+function chegarCasa(){
+  document.getElementById('av-desafio').innerHTML = '';
+  posicionar(6, true);
+  setTimeout(()=>{
+    document.getElementById('av-amigo').classList.remove('andando');
+    anima(document.getElementById('av-amigo'),'pula'); sininho();
+    document.getElementById('av-desafio').innerHTML = `<h2>Chegamos em casa! 🎉</h2><p class="av-txt">Você ganhou 5 estrelas com ${av.amigo.a} ${av.amigo.n}!</p>
+      <button class="btn b-ok grandao" onclick="novaAventura()">Nova aventura <span class="emo">🗺️</span></button>`;
+    falar([`Chegamos em casa! Você ganhou cinco estrelas! Muito bem!`], ()=>somReal(av.amigo));
+  }, cfg.anim ? 1450 : 50);
+}
 
 /* ================= APP INSTALÁVEL (PWA) ================= */
 let pedidoInstalar = null;
