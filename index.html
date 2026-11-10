@@ -269,15 +269,16 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 .peca.posta{box-shadow:none;border-radius:0;z-index:1;pointer-events:none}
 /* colorir */
 .colorir{display:flex;flex-direction:column;align-items:center;gap:10px}
-.desenho{width:min(92%,420px);max-height:38dvh;background:#fff;border-radius:22px;box-shadow:0 4px 0 var(--line);padding:8px}
+.desenho{width:min(92%,420px);max-height:min(38dvh,46vw + 120px);background:#fff;border-radius:22px;box-shadow:0 4px 0 var(--line);padding:8px}
 .desenho .parte{cursor:pointer;transition:fill .2s}
 .desenho .parte.alvo{stroke:var(--accent);stroke-width:7;stroke-dasharray:14 8;animation:formiga 1s linear infinite}
 @keyframes formiga{to{stroke-dashoffset:-22}}
 .pinta{animation:pinta .35s ease}
 @keyframes pinta{50%{opacity:.6}}
-.paleta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:560px}
+.paleta{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 6px;max-width:560px}
+@media (max-height:700px){.desenho{max-height:30dvh}.cor .cn{font-size:10px}.av-cena.mini{height:56px}.av-perg h2{font-size:20px}}
 .cor{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px;border-radius:16px}
-.cor .bola{width:clamp(40px,11vw,54px);height:clamp(40px,11vw,54px);border-radius:50%;background:var(--k);box-shadow:inset 0 -4px 0 rgba(0,0,0,.12),0 0 0 2px #E5DCCB}
+.cor .bola{width:clamp(34px,9.5vw,54px);height:clamp(34px,9.5vw,54px);border-radius:50%;background:var(--k);box-shadow:inset 0 -4px 0 rgba(0,0,0,.12),0 0 0 2px #E5DCCB}
 .cor .cn{font-size:12px;font-weight:800;color:var(--soft)}
 .cor.on{background:#fff;box-shadow:0 0 0 3px var(--ink)}
 .cor.on .bola{transform:scale(1.08)}
@@ -1559,10 +1560,10 @@ ATIV.quebra = async d => {
   const [cols, rows] = [[2,1],[2,2],[3,2]][d-1];
   av.alvo = alvo;
   const frase = `Monte ${alvo.a} ${alvo.n}! Arraste as peças para o lugar certo.`;
-  painel(frase, '', `<div class="quebra" id="qb"></div>`, [frase]);
+  painel(`Monte ${alvo.a} ${alvo.n}!`, '', `<div class="quebra" id="qb"></div>`, [frase]);
   const area = document.getElementById('qb');
   const larg = area.clientWidth || 300;
-  const S = Math.round(Math.max(160, Math.min(larg*0.62, window.innerHeight*0.34, 300)));
+  const S = Math.round(Math.max(150, Math.min(larg*0.56, window.innerHeight*0.3, 300)));
   const c = document.createElement('canvas'); c.width=S; c.height=S;
   try{ await document.fonts.load(`${S}px "Noto Color Emoji"`, alvo.e); }catch(e){}
   const ctx = c.getContext('2d'); ctx.textAlign='center'; ctx.textBaseline='middle';
@@ -1637,7 +1638,7 @@ ATIV.colorir = d => {
   corAtual = sortear(['vermelho','azul','amarelo','verde','rosa','roxo']);
   av.col = {ds, pintadas:new Set()};
   const frase = `Vamos colorir ${ds.nome}! Escolha uma cor e toque no desenho.`;
-  painel(frase, '', `<div class="colorir">${desenhoHTML(ds, true)}${paletaHTML(['vermelho','laranja','amarelo','verde','azul','roxo','rosa','marrom','branco'], 'escolherCor')}
+  painel(`Vamos colorir ${ds.nome}!`, '', `<div class="colorir">${desenhoHTML(ds, true)}${paletaHTML(['vermelho','laranja','amarelo','verde','azul','roxo','rosa','marrom','branco'], 'escolherCor')}
     <button class="btn b-ok" id="col-pronto" style="margin:10px auto 0;visibility:hidden" onclick="colorirPronto()">Pronto! <span class="emo">✅</span></button></div>`, [frase]);
 };
 function escolherCor(c){
