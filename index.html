@@ -166,7 +166,10 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 .av-perg{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:14px}
 .av-dest{font-size:clamp(56px,11vw,96px)}
 .ouvir.mini{width:60px;height:60px;font-size:30px}
-.av-op{max-width:720px}
+.av-op{max-width:720px;display:flex!important;flex-wrap:wrap;justify-content:center;gap:14px}
+.av-op .card{flex:0 1 calc(33.3% - 14px);min-width:96px}
+.av-op .card .nome{font-size:clamp(12px,3.2vw,20px);overflow-wrap:anywhere}
+.card .nome{overflow-wrap:anywhere}
 .av-op .card .emo{font-size:clamp(56px,13vw,100px)}
 .av-op.contar{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
 .contavel{position:relative;background:#fff;border-radius:24px;width:clamp(80px,18vw,130px);aspect-ratio:1;box-shadow:0 4px 0 var(--line);display:grid;place-items:center}
