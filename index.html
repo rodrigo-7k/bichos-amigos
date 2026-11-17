@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Bichos Amigos</title>
 <meta name="theme-color" content="#F08A4B">
 <meta name="description" content="Jogo de animais com sons reais, curiosidades e busca por voz">
@@ -23,6 +23,7 @@
   --ok:#5DAE6B; --emoji:'Noto Color Emoji','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol',sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif}
 button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .emo{font-family:var(--emoji);line-height:1;display:inline-block}
@@ -291,6 +292,34 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 .cor.on{background:#fff;box-shadow:0 0 0 3px var(--ink)}
 .cor.on .bola{transform:scale(1.08)}
 
+/* barra de botões fixa embaixo */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:45;display:none;justify-content:center;flex-wrap:wrap;gap:10px;padding:14px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(251,247,240,0),rgba(251,247,240,.97) 28%)}
+.barra.show{display:flex}
+.barra .btn{margin:0;font-size:clamp(18px,4.6vw,24px);padding:13px 24px}
+body.com-barra main{padding-bottom:130px}
+#prox,#mem-fim{display:none!important}
+/* jogos livres */
+.livre-topo{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.livre-topo h2{margin:0;font-size:clamp(20px,4.6vw,30px);font-weight:900}
+#livre h2{font-size:clamp(20px,4.6vw,32px);font-weight:900;margin:6px 0 10px;line-height:1.2}
+.menu-jogos{grid-template-columns:repeat(auto-fill,minmax(min(200px,44vw),1fr))!important}
+.palavra{font-size:clamp(34px,10vw,64px);font-weight:900;letter-spacing:.08em;margin:4px 0 16px}
+.palavra .falta{display:inline-block;min-width:1.1em;border-bottom:6px solid var(--accent);color:var(--accent)}
+.palavra .falta.ok{color:var(--ok);border-color:var(--ok)}
+.letras{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.letra{width:clamp(72px,21vw,110px);aspect-ratio:1;border-radius:24px;background:#fff;box-shadow:0 4px 0 var(--line);font-size:clamp(40px,11vw,64px);font-weight:900}
+.letra.certo{box-shadow:0 0 0 6px var(--ok),0 4px 0 var(--line)}
+.letra.errado{opacity:.35}
+.contar.so-ver .contavel{width:clamp(56px,16vw,96px)}
+.contar.so-ver .contavel .emo{font-size:clamp(32px,9vw,58px)}
+.numeros{margin-top:16px}
+.bolhas-area{position:relative;height:calc(100dvh - 210px);min-height:300px;border-radius:26px;overflow:hidden;background:linear-gradient(#CFEFFF,#F3FBFF);box-shadow:0 4px 0 var(--line);touch-action:none}
+.bolha{position:absolute;bottom:-150px;border-radius:50%;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95),rgba(255,255,255,.25) 30%,var(--h) 75%,rgba(255,255,255,.6));box-shadow:inset -6px -10px 18px rgba(255,255,255,.6),0 2px 8px rgba(0,0,0,.08);display:grid;place-items:center;animation:sobe linear forwards}
+.bolha .emo{font-size:1em;pointer-events:none}
+.bolha.pop{animation:estoura .3s ease-out forwards}
+@keyframes sobe{to{transform:translateY(calc(-100dvh - 160px))}}
+.bolhas-cont{font-size:24px;font-weight:900;color:var(--soft);min-height:30px}
+
 /* faixa de instalação */
 #faixa{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:40;background:#fff;border-radius:22px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.15);align-items:center;gap:12px;font-weight:800;font-size:16px;max-width:640px;margin:0 auto}
 #faixa .fx{width:40px;height:40px;border-radius:50%;background:#F1EADD;font-weight:900;flex:0 0 auto}
@@ -334,6 +363,17 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
       <button class="tile" style="--c:#F4B860" onclick="abrirJogo('som')"><span class="emo">🔊</span><b>Quem faz assim?</b><small>Ouça o som e ache o bicho</small></button>
       <button class="tile" style="--c:#8CC2E6" onclick="abrirJogo('mem')"><span class="emo">🃏</span><b>Memória</b><small>Ache os pares iguais</small></button>
       <button class="tile" style="--c:#93C47D" onclick="abrirJogo('av')"><span class="emo">🗺️</span><b>Aventura</b><small>12 fases com brincadeiras</small></button>
+      <button class="tile" style="--c:#F48FB1" onclick="abrirJogo('livre:colorir')"><span class="emo">🎨</span><b>Colorir</b><small>Pinte do seu jeito</small></button>
+      <button class="tile" style="--c:#F2CF62" onclick="abrirJogo('livre:quebra')"><span class="emo">🧩</span><b>Quebra-cabeça</b><small>Monte o bicho</small></button>
+      <button class="tile" style="--c:#76AE98" onclick="abrirJogo('livre:alimentar')"><span class="emo">🥕</span><b>Hora de comer</b><small>Dê a comida certa</small></button>
+      <button class="tile" style="--c:#9B6BD3" onclick="abrirJogo('livre:sombra')"><span class="emo">🌑</span><b>Sombras</b><small>De quem é a sombra?</small></button>
+      <button class="tile" style="--c:#E74C3C" onclick="abrirJogo('livre:baloes')"><span class="emo">🎈</span><b>Balões</b><small>Estoure a cor certa</small></button>
+      <button class="tile" style="--c:#5DBB63" onclick="abrirJogo('livre:esconde')"><span class="emo">🌳</span><b>Esconde-esconde</b><small>Ache o bicho escondido</small></button>
+      <button class="tile" style="--c:#F39C3D" onclick="abrirJogo('livre:cores')"><span class="emo">🖌️</span><b>Cores</b><small>Pinte com a cor certa</small></button>
+      <button class="tile" style="--c:#4A90E2" onclick="abrirJogo('livre:letras')"><span class="emo">🔤</span><b>Letras</b><small>Com que letra começa?</small></button>
+      <button class="tile" style="--c:#A0703C" onclick="abrirJogo('livre:numeros')"><span class="emo">🔢</span><b>Números</b><small>Conte e escolha</small></button>
+      <button class="tile" style="--c:#B7D46F" onclick="abrirJogo('livre:sequencia')"><span class="emo">➡️</span><b>Sequência</b><small>Quem vem agora?</small></button>
+      <button class="tile" style="--c:#8CC2E6" onclick="abrirJogo('bolhas')"><span class="emo">🫧</span><b>Bolhas</b><small>Brincadeira calminha</small></button>
     </div>
 
   <div id="jogo" class="tela-jogo">
@@ -358,6 +398,21 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
     <div class="mgrade" id="mem-grade"></div>
     <div class="fb" id="mem-fb"></div>
     <button class="btn b-ok prox" id="mem-fim" onclick="novaMemoria()">Jogar de novo <span class="emo">🔄</span></button>
+  </div>
+
+  <div id="livre" class="tela-jogo">
+    <div class="livre-topo"><button class="voltar" style="margin:0" onclick="menuJogos()">◀ Jogos</button><h2 id="livre-titulo"></h2></div>
+    <div class="niveis" id="livre-niveis">
+      <button class="chip nivel" data-n="1" onclick="nivelLivre(1)"><span class="emo">🌱</span>Fácil</button>
+      <button class="chip nivel" data-n="2" onclick="nivelLivre(2)"><span class="emo">🌿</span>Médio</button>
+      <button class="chip nivel" data-n="3" onclick="nivelLivre(3)"><span class="emo">🌳</span>Difícil</button>
+    </div>
+    <div id="livre-area"></div>
+  </div>
+
+  <div id="bolhas" class="tela-jogo">
+    <div class="livre-topo"><button class="voltar" style="margin:0" onclick="menuJogos()">◀ Jogos</button><h2><span class="emo">🫧</span> Bolhas</h2><span class="bolhas-cont" id="bolhas-cont"></span></div>
+    <div class="bolhas-area" id="bolhas-area"></div>
   </div>
 
   <div id="av" class="tela-jogo">
@@ -388,6 +443,7 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 </main>
 
 <div id="faixa"></div>
+<div id="barra" class="barra"></div>
 
 <!-- detalhe do bicho -->
 <div class="ov" id="ov-det" onclick="if(event.target===this)fecharDet()">
@@ -563,6 +619,25 @@ const ANIMAIS = [
  {n:'Caranguejo',a:'o',e:'🦀',c:'mar',s:'Tic tic tic!',t:'Tic tic!',p:1.6,r:1.2,f:['O caranguejo anda de lado.','O caranguejo tem duas garras para pegar comida.'],k:['siri','caranguejinho']},
  {n:'Foca',a:'a',e:'🦭',c:'mar',s:'Ór ór ór!',t:'Ór ór!',p:.8,f:['A foca adora nadar e tomar sol nas pedras.','A foca tem bigodes compridos.'],k:['foquinha','leao marinho']},
  {n:'Lontra',a:'a',e:'🦦',c:'mar',s:'Iii! Iii!',t:'Iii iii!',p:1.7,f:['Algumas lontras dormem boiando de mãos dadas.','A lontra adora brincar na água.'],k:['lontrinha']}
+ ,{n:'Burro',a:'o',e:'🫏',c:'fazenda',s:'Iii-óóó! Iii-óóó!',t:'Iii-óóó!',p:1,f:['O burro faz ió, ió.','O burro é muito forte e carrega coisas pesadas.','O burro tem orelhas bem compridas.','O burro é parente do cavalo.','O burro é esperto e cuidadoso.'],k:['jumento','jegue','mula','burrinho']}
+ ,{n:'Carneiro',a:'o',e:'🐏',c:'fazenda',s:'Bééé! Bééé!',t:'Bééé!',p:.8,f:['O carneiro é o macho da ovelha.','O carneiro tem chifres enrolados.','O carneiro também tem lã.','O carneiro gosta de subir em morros.','O carneiro vive em rebanho.'],k:['carneirinho']}
+ ,{n:'Ganso',a:'o',e:'🪿',c:'fazenda',s:'Quén quén quén!',t:'Quén quén!',p:1.1,f:['O ganso grasna alto quando vê alguém diferente.','O ganso voa em forma de V com os amigos.','O filhote do ganso se chama gansinho.','O ganso nada muito bem.','O ganso come capim e sementes.'],k:['gansa','gansinho']}
+ ,{n:'Orangotango',a:'o',e:'🦧',c:'selva',s:'Uuu uuu uuu!',t:'Uuu uuu!',p:.7,f:['O orangotango tem o pelo cor de laranja.','O orangotango passa quase o dia todo nas árvores.','Os braços do orangotango são muito compridos.','Todo dia o orangotango faz uma cama nova de folhas.','O orangotango vive em florestas da Ásia.'],k:['orangotangos']}
+ ,{n:'Bisão',a:'o',e:'🦬',c:'selva',s:'Hummmf!',t:'Hummmf!',p:.4,f:['O bisão é muito grande e peludo.','O bisão vive em manadas.','O bisão tem uma corcova nas costas.','Mesmo grandão, o bisão corre muito rápido.','No inverno, o pelo do bisão fica bem grosso.'],k:['bisao','biscao']}
+ ,{n:'Mamute',a:'o',e:'🦣',c:'floresta',s:'Fuuuuum!',t:'Fuuum!',p:.3,r:.7,f:['O mamute viveu há muito tempo, em lugares frios.','O mamute era parente do elefante.','O mamute era todo peludo.','O mamute tinha presas enormes e curvadas.','Hoje não existem mais mamutes.'],k:['mamutes']}
+ ,{n:'Urso-polar',a:'o',e:'🐻‍❄️',c:'floresta',s:'Grrrrr!',t:'Grrrr!',p:.3,r:.7,f:['O urso-polar vive no gelo, bem no norte do mundo.','Embaixo do pelo branco, a pele do urso-polar é preta.','O urso-polar nada muito bem.','O urso-polar come focas.','As patas grandes ajudam o urso-polar a andar no gelo.'],k:['urso polar','urso branco']}
+ ,{n:'Texugo',a:'o',e:'🦡',c:'floresta',s:'Grrr! Grrr!',t:'Grrr!',p:.9,f:['O texugo cava tocas com as patas fortes.','O texugo tem listras brancas e pretas no rosto.','O texugo sai mais de noite.','O texugo come minhocas e frutas.','A toca do texugo tem muitos túneis.'],k:['texugos']}
+ ,{n:'Castor',a:'o',e:'🦫',c:'floresta',s:'Tchac tchac tchac!',t:'Tchac tchac!',p:1.2,f:['O castor constrói barragens nos rios com galhos.','Os dentes do castor são laranja e muito fortes.','O castor usa o rabo achatado como um remo.','O castor rói árvores para fazer a casa.','O castor nada muito bem.'],k:['castores']}
+ ,{n:'Baiacu',a:'o',e:'🐡',c:'mar',s:'Blub! Blub!',t:'Blub!',p:1.4,f:['O baiacu enche o corpo de água e vira uma bola.','Quando o baiacu incha, aparecem espinhos.','O baiacu nada devagar.','O baiacu tem dentes fortes, parecidos com um bico.','O baiacu vive no mar.'],k:['baiacus','peixe bola']}
+ ,{n:'Lagosta',a:'a',e:'🦞',c:'mar',s:'A lagosta é quietinha.',t:'🤫 Quietinha',q:1,f:['A lagosta tem duas garras grandes.','A lagosta nada para trás quando se assusta.','A lagosta troca de casca para crescer.','A lagosta vive no fundo do mar.','A lagosta tem antenas compridas.'],k:['lagostas']}
+ ,{n:'Camarão',a:'o',e:'🦐',c:'mar',s:'O camarão é quietinho.',t:'🤫 Quietinho',q:1,f:['O camarão nada para trás, bem rápido.','O camarão tem dez patinhas.','O camarão vive no mar e em rios.','Muitos camarões são quase transparentes.','O camarão tem antenas compridas.'],k:['camarao','camaroes']}
+ ,{n:'Lula',a:'a',e:'🦑',c:'mar',s:'A lula é quietinha.',t:'🤫 Quietinha',q:1,f:['A lula tem dez braços.','A lula solta tinta para fugir.','A lula nada muito rápido.','A lula muda de cor.','A lula-gigante tem olhos enormes.'],k:['lulas']}
+ ,{n:'Água-viva',a:'a',e:'🪼',c:'mar',s:'A água-viva é quietinha.',t:'🤫 Quietinha',q:1,f:['A água-viva é transparente.','A água-viva não tem cérebro.','A água-viva queima quando encosta: só olhe de longe!','A água-viva nada abrindo e fechando o corpo.','A água-viva existe há muito, muito tempo.'],k:['agua viva','aguas vivas']}
+ ,{n:'Lagarta',a:'a',e:'🐛',c:'insetos',s:'A lagarta é quietinha.',t:'🤫 Quietinha',q:1,f:['A lagarta come muitas folhas.','A lagarta vira borboleta.','A lagarta faz um casulo para se transformar.','A lagarta anda esticando e encolhendo o corpo.','Algumas lagartas são bem coloridas.'],k:['lagartinha','taturana']}
+ ,{n:'Minhoca',a:'a',e:'🪱',c:'insetos',s:'A minhoca é quietinha.',t:'🤫 Quietinha',q:1,f:['A minhoca não tem olhos.','A minhoca deixa a terra boa para as plantas.','A minhoca respira pela pele.','A minhoca gosta de terra molhada.','Quando chove, a minhoca sai da terra.'],k:['minhocas']}
+ ,{n:'Mosquito',a:'o',e:'🦟',c:'insetos',s:'Zzzzzzz!',t:'Zzzzz!',p:1.8,f:['Quem pica é a fêmea do mosquito.','O mosquito faz zzzz quando voa.','O mosquito nasce na água parada.','Por isso não pode deixar água parada.','O mosquito voa mais de noite.'],k:['pernilongo','muriçoca']}
+ ,{n:'Mosca',a:'a',e:'🪰',c:'insetos',s:'Bzzzz! Bzzzz!',t:'Bzzzz!',p:1.5,f:['A mosca tem olhos enormes.','A mosca consegue andar no teto.','A mosca sente o gosto com os pés.','A mosca bate as asas muito rápido.','A mosca voa para todos os lados.'],k:['mosquinha','moscas']}
+ ,{n:'Besouro',a:'o',e:'🪲',c:'insetos',s:'Bzzzzz!',t:'Bzzzz!',p:.9,f:['O besouro tem uma casca dura nas costas.','Existem muitos tipos de besouro.','Embaixo da casca, o besouro tem asas.','O vaga-lume, que brilha no escuro, é um tipo de besouro.','Alguns besouros empurram bolinhas pelo chão.'],k:['besouros','vaga lume']}
 ];
 ANIMAIS.forEach((x,i)=>{x.i=i;x.ci=0;});
 
@@ -574,7 +649,7 @@ const GOOGLE={cachorro:'dog',gato:'cat',vaca:'cow',porco:'pig',cavalo:'horse',ov
  camelo:'camel',panda:'panda',onca:'leopard',lobo:'wolf',alce:'moose',guaxinim:'raccoon',ourico:'hedgehog',morcego:'bat',
  coruja:'owl',aguia:'falcon',pinguim:'penguin',cisne:'swan',pomba:'dove',passarinho:'robin',corvo:'crow',
  sapo:'frog',cobra:'rattlesnake',tartaruga:'turtle',jacare:'alligator',lagarto:'lizard',dinossauro:'dinosaur','dinossauro pescocudo':'dinosaur',
- abelha:'bee',borboleta:'butterfly',escorpiao:'scorpion',tubarao:'shark',baleia:'humpback-whale',lontra:'otter'};
+ abelha:'bee', carneiro:'sheep', bisao:'buffalo',borboleta:'butterfly',escorpiao:'scorpion',tubarao:'shark',baleia:'humpback-whale',lontra:'otter'};
 
 /* Sons reais — Wikimedia Commons (para os que o Google não tem) (licenças livres). [arquivo, início(s), duração(s), licença, autor, página] */
 const WM='https://upload.wikimedia.org/wikipedia/commons/';
@@ -881,7 +956,7 @@ function modo(m){
   document.getElementById('m-jog').classList.toggle('on', m==='jogos');
   document.getElementById('explorar').style.display = m==='explorar'?'':'none';
   document.getElementById('jogos').style.display = m==='jogos'?'block':'none';
-  if(m==='jogos') menuJogos(); else { if(synth) synth.cancel(); pararSom(); }
+  if(m==='jogos') menuJogos(); else { if(synth) synth.cancel(); pararSom(); esconderBarra(); pararBolhas(); }
 }
 const sortear = arr => arr[Math.floor(Math.random()*arr.length)];
 function embaralhar(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
@@ -893,6 +968,7 @@ function novaRodada(){
   document.getElementById('opcoes').innerHTML = rodada.opcoes.map(x=>cardHTML(x,'responder')).join('');
   document.getElementById('fb').textContent = '';
   document.getElementById('prox').classList.remove('show');
+  esconderBarra();
   placar();
   tocarRodada();
 }
@@ -905,7 +981,7 @@ function responder(i){
     el.classList.add('certo'); anima(el.querySelector('.emo'),'pula'); sininho();
     document.getElementById('fb').textContent = `Isso! ${x.a==='a'?'É a':'É o'} ${x.n}! 🎉`;
     pararSom(); falar([`Isso! É ${x.a} ${x.n}! Que lindo jogo!`]);
-    document.getElementById('prox').classList.add('show');
+    mostrarBarra(`<button class="btn b-ok" onclick="novaRodada()">Outro <span class="emo">▶️</span></button>${BTN_JOGOS}`);
     placar();
   } else {
     el.classList.add('errado');
@@ -999,6 +1075,13 @@ document.addEventListener('pointerdown', ()=>{ try{ ctxAudio(); }catch(e){} }, {
 if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 // salva os sons em segundo plano na primeira visita
 window.addEventListener('load', ()=>{ try{ if(!localStorage.getItem('bichos-sons-ok')){ setTimeout(async()=>{ let ok=0; const l=ANIMAIS.filter(x=>x.au&&!x.au.b64); for(const x of l){ try{ await baixarSom(x.au.url); ok++; }catch(e){} } if(ok===l.length) localStorage.setItem('bichos-sons-ok','1'); }, 3000); } }catch(e){} });
+
+/* ================= SEM ZOOM ================= */
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev, e=>e.preventDefault(), {passive:false}));
+document.addEventListener('touchmove', e=>{ if(e.touches && e.touches.length>1) e.preventDefault(); }, {passive:false});
+document.addEventListener('dblclick', e=>e.preventDefault(), {passive:false});
+document.addEventListener('wheel', e=>{ if(e.ctrlKey) e.preventDefault(); }, {passive:false});
+document.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey) && ['+','-','=','0'].includes(e.key)) e.preventDefault(); });
 
 /* ================= TELA SEMPRE LIGADA ================= */
 let travaTela = null;
@@ -1120,15 +1203,22 @@ const FATOS_EXTRA = {
 ANIMAIS.forEach(x=>{ (FATOS_EXTRA[x.n]||[]).forEach(f=>x.f.push(f)); });
 
 /* ================= MENU DE JOGOS ================= */
-const TELAS_JOGO = ['jogo','mem','av'];
+const TELAS_JOGO = ['jogo','mem','av','livre','bolhas'];
 function menuJogos(){
   pararSom(); if(synth) synth.cancel();
+  esconderBarra(); pararBolhas();
+  if(typeof av!=='undefined'){ av.livre = null; av.guia = null; }
+  ['livre-area','av-desafio'].forEach(id=>{ const e=document.getElementById(id); if(e) e.innerHTML=''; });
   TELAS_JOGO.forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('menu-jogos').style.display='';
 }
 function abrirJogo(j){
   document.getElementById('menu-jogos').style.display='none';
   TELAS_JOGO.forEach(id=>document.getElementById(id).style.display='none');
+  esconderBarra(); pararBolhas();
+  window.scrollTo(0,0);
+  if(j.startsWith('livre:')){ document.getElementById('livre').style.display='block'; abrirLivre(j.slice(6)); return; }
+  if(j==='bolhas'){ document.getElementById('bolhas').style.display='block'; iniciarBolhas(); return; }
   const id = j==='som' ? 'jogo' : j;
   document.getElementById(id).style.display='block';
   if(j==='som') novaRodada();
@@ -1151,6 +1241,7 @@ function novaMemoria(n){
       <div class="lado rosto" style="--c:${CATS[c.x.c].c}"><span class="emo">${c.x.e}</span><span class="nome">${nomeCurto(c.x)}</span></div></div></button>`).join('');
   document.getElementById('mem-fb').textContent = '';
   document.getElementById('mem-fim').classList.remove('show');
+  esconderBarra();
   window.scrollTo(0,0);
   ajustarMemoria();
   falar(['Ache os pares iguais!']);
@@ -1191,7 +1282,7 @@ function virar(i){
     if(mem.pares===mem.total){
       falar([`Achou! ${ca.x.n}!`], ()=>{
         document.getElementById('mem-fb').textContent = 'Você achou todos os pares! 🎉';
-        document.getElementById('mem-fim').classList.add('show');
+        mostrarBarra(`<button class="btn b-ok" onclick="novaMemoria()">Jogar de novo <span class="emo">🔄</span></button>${BTN_JOGOS}`);
         falar(['Que lindo jogo! Você achou todos os pares!']);
       });
     } else falar([`Achou! ${ca.x.n}!`], ()=>somReal(ca.x));
@@ -1211,7 +1302,7 @@ const TEMAS = {
   floresta:{nome:'Floresta', emo:'🌲', ceu:['#A9D8C8','#E3F4EC'], m1:'#86BE95', m2:'#68A57A', tr:'#D9C29A', tr2:'#E9D9B8', sol:'#FFE08A', nuvem:.8, deco:['🌲','🍄','🌲','🌿','🌳','🐦'], cats:['floresta'], moita:'🌲'},
   praia:{nome:'Praia', emo:'🏖️', ceu:['#9ED8F0','#E0F5FC'], m1:'#7CC3E8', m2:'#F3DFA8', tr:'#E8CF8F', tr2:'#F6E7BE', sol:'#FFD966', nuvem:.9, deco:['🌴','🐚','⛱️','🦀','🌴','🐦'], cats:['mar'], moita:'⛱️'},
   selva:{nome:'Selva', emo:'🌴', ceu:['#F9D9A0','#FDF0D5'], m1:'#CDBB6E', m2:'#B4A257', tr:'#E2C99A', tr2:'#F0DEB9', sol:'#FFB84D', nuvem:.7, deco:['🌴','🌳','🌵','🌴','🌿','🦜'], cats:['selva'], moita:'🌿'},
-  neve:{nome:'Neve', emo:'⛄', ceu:['#D3E3F2','#F4F8FC'], m1:'#F7FAFD', m2:'#E3ECF5', tr:'#C9D8E6', tr2:'#DDE8F2', sol:'#FFE8A3', nuvem:.9, deco:['🌲','⛄','❄️','🌲','❄️','🐧'], nomes:['Pinguim','Urso','Foca','Lobo','Alce','Raposa','Coruja','Iaque'], moita:'⛄'},
+  neve:{nome:'Neve', emo:'⛄', ceu:['#D3E3F2','#F4F8FC'], m1:'#F7FAFD', m2:'#E3ECF5', tr:'#C9D8E6', tr2:'#DDE8F2', sol:'#FFE8A3', nuvem:.9, deco:['🌲','⛄','❄️','🌲','❄️','🐧'], nomes:['Pinguim','Urso-polar','Foca','Lobo','Alce','Raposa','Coruja','Iaque','Mamute'], moita:'⛄'},
   noite:{nome:'Noite', emo:'🌙', ceu:['#2E3A6B','#4F5A94'], m1:'#3F6E5C', m2:'#325848', tr:'#8C8466', tr2:'#A39B7C', sol:'#F4F1C9', nuvem:.25, deco:['🌳','🍄','⭐','🌳','✨','🦉'], nomes:['Coruja','Morcego','Grilo','Guaxinim','Sapo','Gato','Lobo','Ouriço'], moita:'🌳'}
 };
 const ORDEM_TEMAS = ['fazenda','floresta','praia','selva','neve','noite'];
@@ -1221,14 +1312,20 @@ const SEQS = [
   ['cores','som','sequencia','alimentar','esconde'],
   ['tamanho','quebra','sombra','baloes','colorir'],
   ['contar','sequencia','cores','som','quebra'],
-  ['esconde','sombra','alimentar','baloes','colorir']
+  ['esconde','sombra','alimentar','baloes','colorir'],
+  ['letras','numeros','alimentar','quebra','cores'],
+  ['som','letras','esconde','sequencia','colorir'],
+  ['numeros','sombra','quebra','baloes','letras'],
+  ['casa','tamanho','letras','numeros','esconde'],
+  ['sequencia','alimentar','numeros','cores','quebra'],
+  ['letras','som','baloes','sombra','numeros']
 ];
 const FASES = Array.from({length:12}, (_,i)=>({
   tema: ORDEM_TEMAS[i%6],
   d: i<4 ? 1 : (i<8 ? 2 : 3),
-  seq: i<6 ? SEQS[i] : SEQS[(i+3)%6].slice().reverse()
+  seq: SEQS[i]
 }));
-const NOME_ATIV = {contar:'Contar', alimentar:'Dar comida', som:'Sons', colorir:'Colorir', esconde:'Esconde-esconde', sombra:'Sombras', baloes:'Balões', casa:'Onde mora?', quebra:'Quebra-cabeça', cores:'Pintar', sequencia:'Sequência', tamanho:'Grande e pequeno'};
+const NOME_ATIV = {letras:'Letras', numeros:'Números', contar:'Contar', alimentar:'Dar comida', som:'Sons', colorir:'Colorir', esconde:'Esconde-esconde', sombra:'Sombras', baloes:'Balões', casa:'Onde mora?', quebra:'Quebra-cabeça', cores:'Pintar', sequencia:'Sequência', tamanho:'Grande e pequeno'};
 
 const COMIDAS = {
   'Coelho':['🥕','cenoura'], 'Macaco':['🍌','banana'], 'Cachorro':['🦴','osso'], 'Gato':['🐟','peixe'],
@@ -1251,9 +1348,11 @@ const av = {fase:0, amigo:null, passo:0, estrelas:0, pontos:[], fala:[], feito:f
 const bicho = n => ANIMAIS.find(a=>a.n===n);
 const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
 const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
-const nOpcoes = () => [2,3,4][FASES[av.fase].d-1];
-const temaAt = () => TEMAS[FASES[av.fase].tema];
+const nivelAt = () => av.livre ? av.dLivre : FASES[av.fase].d;
+const nOpcoes = () => [2,3,4][nivelAt()-1];
+const temaAt = () => TEMAS[av.livre ? av.temaLivre : FASES[av.fase].tema];
 function animaisDoTema(){
+  if(av.livre) return ANIMAIS.slice();
   const t = temaAt();
   const l = t.nomes ? t.nomes.map(bicho) : ANIMAIS.filter(x=>t.cats.includes(x.c));
   return l.filter(Boolean);
@@ -1282,6 +1381,7 @@ function avTela(qual){
   qual.forEach(id=>document.getElementById(id).style.display = '');
 }
 function novaAventura(){
+  esconderBarra(); av.livre = null;
   avTela(['av-mapa']);
   const el = document.getElementById('av-mapa');
   el.innerHTML = `<h2>Escolha a fase</h2><div class="fases">${FASES.map((f,i)=>{
@@ -1293,6 +1393,7 @@ function novaAventura(){
   falar(['Escolha a fase!']);
 }
 function escolherAmigo(f){
+  esconderBarra(); av.livre = null;
   av.fase = f;
   avTela(['av-escolha']);
   const esc = embaralhar(AMIGOS.slice()).slice(0,3).map(bicho);
@@ -1304,7 +1405,8 @@ function comecarFase(i){
   avTela(['av-cena-box','av-desafio']);
   montarCena();
   pintarEstrelas();
-  document.getElementById('av-desafio').innerHTML = `<button class="btn b-som grandao" onclick="andar()">Vamos! <span class="emo">▶️</span></button>`;
+  document.getElementById('av-desafio').innerHTML = '';
+  mostrarBarra(`<button class="btn b-som" onclick="andar()">Vamos! <span class="emo">▶️</span></button>`);
   falar([`Fase ${av.fase+1}, ${temaAt().nome}! Vamos com ${av.amigo.a} ${av.amigo.n}!`]);
 }
 function montarCena(){
@@ -1333,6 +1435,7 @@ function pintarEstrelas(){
 function andar(){
   const cena = document.getElementById('av-cena');
   cena.classList.remove('mini');
+  esconderBarra();
   document.getElementById('av-desafio').innerHTML = '';
   posicionar(av.passo+1, true);
   setTimeout(()=>{
@@ -1341,15 +1444,16 @@ function andar(){
     atividade(FASES[av.fase].seq[av.passo]);
   }, cfg.anim ? 1450 : 60);
 }
+const areaDesafio = () => document.getElementById(av.livre ? 'livre-area' : 'av-desafio');
 function painel(pergunta, destaque, corpoHTML, fala){
   av.fala = fala; av.feito = false;
-  const el = document.getElementById('av-desafio');
+  const el = areaDesafio();
   el.innerHTML = `
     <div class="av-perg">${destaque?`<span class="emo av-dest">${destaque}</span>`:''}<h2>${pergunta}</h2>
     <button class="ouvir mini" onclick="repetirDesafio()" aria-label="Ouvir de novo"><span class="emo">🔊</span></button></div>
     <div class="av-corpo">${corpoHTML}</div><div class="fb" id="av-fb"></div>`;
   repetirDesafio();
-  try{ document.getElementById('av-cena-box').scrollIntoView({block:'start', behavior: cfg.anim?'smooth':'auto'}); }catch(e){}
+  if(!av.livre){ try{ document.getElementById('av-cena-box').scrollIntoView({block:'start', behavior: cfg.anim?'smooth':'auto'}); }catch(e){} }
 }
 function repetirDesafio(){ if(typeof av.fala==='function') av.fala(); else falar(av.fala); }
 function opcaoHTML(emo, nome, acao, cor, extra){ return `<button class="card ${extra||''}" style="--c:${cor||'#F4B860'}" onclick="${acao}"><span class="emo">${emo}</span><span class="nome">${nome}</span></button>`; }
@@ -1360,19 +1464,25 @@ function acertou(el, frase, depois){
   av.feito = true;
   if(el){ el.classList.add('certo'); anima(el.querySelector('.emo')||el,'pula'); }
   sininho(); pararSom();
+  if(av.livre){
+    acertosLivre++;
+    fb(`⭐ ${frase}`);
+    falar([frase], depois);
+    mostrarBarra(`<button class="btn b-ok" onclick="rodadaLivre()">Outro <span class="emo">▶️</span></button>${BTN_JOGOS}`);
+    return;
+  }
   av.estrelas++; pintarEstrelas();
   const m = document.getElementById('av-m'+av.passo); if(m){ m.classList.add('feita'); m.innerHTML='<span class="emo">⭐</span>'; }
   fb('⭐ ' + frase);
   falar([frase], depois);
   av.passo++;
   const fim = av.passo>=5;
-  document.getElementById('av-desafio').insertAdjacentHTML('beforeend',
-    `<button class="btn b-ok grandao" id="av-seguir" onclick="${fim?'chegarCasa()':'andar()'}">${fim?'Ir para casa':'Continuar'} <span class="emo">▶️</span></button>`);
-  setTimeout(()=>{ try{ document.getElementById('av-seguir').scrollIntoView({block:'nearest', behavior: cfg.anim?'smooth':'auto'}); }catch(e){} }, 150);
+  mostrarBarra(`<button class="btn b-ok" onclick="${fim?'chegarCasa()':'andar()'}">${fim?'Ir para casa':'Continuar'} <span class="emo">▶️</span></button>`);
 }
 function chegarCasa(){
   const cena = document.getElementById('av-cena');
   cena.classList.remove('mini');
+  esconderBarra();
   document.getElementById('av-desafio').innerHTML = '';
   posicionar(6, true);
   prog.feitas[av.fase] = true; prog.ate = Math.max(prog.ate, Math.min(av.fase+1, FASES.length-1)); salvarProg();
@@ -1380,15 +1490,14 @@ function chegarCasa(){
     document.getElementById('av-amigo').classList.remove('andando');
     anima(document.getElementById('av-amigo'),'pula'); sininho();
     const temProx = av.fase+1 < FASES.length;
-    document.getElementById('av-desafio').innerHTML = `<h2>Fase ${av.fase+1} completa! 🎉</h2><p class="av-txt">Você ganhou 5 estrelas com ${av.amigo.a} ${av.amigo.n}!</p>
-      <div class="acoes">${temProx?`<button class="btn b-ok grandao" onclick="escolherAmigo(${av.fase+1})">Próxima fase <span class="emo">▶️</span></button>`:''}
-      <button class="btn cinza grandao" onclick="novaAventura()">Mapa <span class="emo">🗺️</span></button></div>`;
+    document.getElementById('av-desafio').innerHTML = `<h2>Fase ${av.fase+1} completa! 🎉</h2><p class="av-txt">Você ganhou 5 estrelas com ${av.amigo.a} ${av.amigo.n}!</p>`;
+    mostrarBarra(`${temProx?`<button class="btn b-ok" onclick="escolherAmigo(${av.fase+1})">Próxima fase <span class="emo">▶️</span></button>`:''}<button class="btn cinza" onclick="novaAventura()">Mapa <span class="emo">🗺️</span></button>`);
     falar([temProx ? 'Chegamos em casa! Fase completa! Que lindo jogo!' : 'Você completou todas as fases! Que lindo jogo!'], ()=>somReal(av.amigo));
   }, cfg.anim ? 1450 : 60);
 }
 
 /* ---------- atividades ---------- */
-function atividade(tipo){ av.guia = null; (ATIV[tipo]||ATIV.som)(FASES[av.fase].d); }
+function atividade(tipo){ av.guia = null; (ATIV[tipo]||ATIV.som)(nivelAt()); }
 const ATIV = {};
 
 /* contar */
@@ -1719,7 +1828,7 @@ function marcarGuia(){
   document.querySelectorAll('.desenho .parte').forEach(el=>el.classList.remove('alvo'));
   const p = av.guia.passos[av.guia.k]; if(!p) return;
   document.querySelectorAll(`.desenho .parte[data-id="${p[0]}"]`).forEach(el=>el.classList.add('alvo'));
-  const h = document.querySelector('#av-desafio .av-perg h2');
+  const h = areaDesafio().querySelector('.av-perg h2');
   if(h) h.innerHTML = `Pinte ${p[2]} de <span class="cor-tag" style="background:${CORES[p[1]][0]}">${CORES[p[1]][1].toUpperCase()}</span>`;
 }
 function checarGuia(c){
@@ -1736,8 +1845,152 @@ function checarGuia(c){
   }
 }
 
+
+/* ---------- novas atividades ---------- */
+const semAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'');
+ATIV.letras = d => {
+  const pool = simples(animaisDoTema()).filter(x=>x.n.length<=9);
+  const x = sortear(pool.length ? pool : simples(ANIMAIS));
+  const certa = semAcento(x.n[0]).toUpperCase();
+  const outras = embaralhar('ABCDEFGHIJLMNOPRSTUVZ'.split('').filter(l=>l!==certa)).slice(0, nOpcoes()-1);
+  av.resp = certa; av.alvo = x;
+  const nome = x.n.toUpperCase();
+  painel(`Com que letra começa?`, x.e,
+    `<div class="palavra" id="palavra"><span class="falta">?</span>${nome.slice(1)}</div>
+     <div class="letras">${embaralhar([certa, ...outras]).map(l=>`<button class="letra" onclick="respLetra(this,'${l}')">${l}</button>`).join('')}</div>`,
+    [`Com que letra começa ${x.n}?`]);
+};
+function respLetra(el, l){
+  if(av.feito) return; const x = av.alvo;
+  if(l===av.resp){ const p=document.querySelector('#palavra .falta'); if(p){ p.textContent = x.n[0].toUpperCase(); p.classList.add('ok'); } acertou(el, `Isso! ${x.n} começa com ${l}!`); }
+  else errou(el, `Hmm, não é ${l}. ${x.n} começa com outra letra. Tenta de novo!`);
+}
+ATIV.numeros = d => {
+  const max = [3,5,9][d-1];
+  const x = sortear(simples(animaisDoTema()).length ? simples(animaisDoTema()) : simples(ANIMAIS));
+  const n = rnd(1, max);
+  const ops = new Set([n]);
+  while(ops.size < 3){ const v = Math.max(1, Math.min(max+1, n + rnd(-2,2))); ops.add(v); }
+  av.resp = n; av.alvo = x;
+  const f = x.a==='a', pl = n===1 ? x.n.toLowerCase() : plural(x);
+  painel(`Quantos tem?`, '',
+    `<div class="contar so-ver">${Array.from({length:n},()=>`<span class="contavel"><span class="emo">${x.e}</span></span>`).join('')}</div>
+     <div class="letras numeros">${[...ops].sort((a,b)=>a-b).map(v=>`<button class="letra" onclick="respNumero(this,${v})">${v}</button>`).join('')}</div>`,
+    [`Quant${f?'as':'os'} ${plural(x)} tem? Conte e escolha o número!`]);
+};
+function respNumero(el, v){
+  if(av.feito) return; const x = av.alvo, f = x.a==='a';
+  const nomes = f ? NUM_F : NUM_M;
+  if(v===av.resp) acertou(el, `Isso! Tem ${nomes[v]}!`);
+  else errou(el, `Hmm, não são ${nomes[v]}. Conte de novo, com o dedinho!`);
+}
+
+/* mais desenhos para colorir */
+DESENHOS.push(
+  {nome:'a joaninha', vb:'0 0 260 240', partes:[
+    ['p2','<path d="M130 58 A86 86 0 0 0 130 228 Z"/>'], ['p3','<path d="M130 58 A86 86 0 0 1 130 228 Z"/>'], ['p1','<circle cx="130" cy="52" r="30"/>']],
+    extra:'<g style="pointer-events:none" fill="#38364A"><circle cx="92" cy="110" r="13"/><circle cx="168" cy="110" r="13"/><circle cx="84" cy="170" r="11"/><circle cx="176" cy="170" r="11"/><circle cx="110" cy="205" r="9"/><circle cx="150" cy="205" r="9"/><rect x="128" y="58" width="4" height="170"/></g><path d="M118 26 Q106 6 96 4 M142 26 Q154 6 164 4" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/>'},
+  {nome:'a tartaruga', vb:'0 0 300 220', partes:[
+    ['p3','<ellipse cx="90" cy="168" rx="22" ry="16"/>'], ['p4','<ellipse cx="190" cy="168" rx="22" ry="16"/>'], ['p5','<path d="M50 130 L18 140 L50 146 Z"/>'],
+    ['p2','<circle cx="236" cy="118" r="26"/>'], ['p1','<path d="M58 140 Q60 60 140 56 Q220 60 222 140 Z"/>'], ['p6','<rect x="52" y="136" width="176" height="18" rx="9"/>']],
+    extra:'<g style="pointer-events:none"><circle cx="244" cy="112" r="5" fill="#38364A"/><path d="M110 70 L140 100 L170 70 M140 100 L140 138 M100 138 L110 104 L140 100 L170 104 L180 138" fill="none" stroke="#38364A" stroke-width="3" opacity=".55"/></g>'},
+  {nome:'o arco-íris', vb:'0 0 300 190', partes:[
+    ['p1','<path d="M10 180 A140 140 0 0 1 290 180 L268 180 A118 118 0 0 0 32 180 Z"/>'],
+    ['p2','<path d="M32 180 A118 118 0 0 1 268 180 L246 180 A96 96 0 0 0 54 180 Z"/>'],
+    ['p3','<path d="M54 180 A96 96 0 0 1 246 180 L224 180 A74 74 0 0 0 76 180 Z"/>'],
+    ['p4','<path d="M76 180 A74 74 0 0 1 224 180 L202 180 A52 52 0 0 0 98 180 Z"/>'],
+    ['p5','<path d="M98 180 A52 52 0 0 1 202 180 L180 180 A30 30 0 0 0 120 180 Z"/>'],
+    ['p6','<path d="M4 186 Q4 160 26 162 Q34 144 54 154 Q72 150 72 172 Q76 188 60 188 L12 188 Q4 188 4 186Z"/>'],
+    ['p7','<path d="M296 186 Q296 160 274 162 Q266 144 246 154 Q228 150 228 172 Q224 188 240 188 L288 188 Q296 188 296 186Z"/>']], extra:''},
+  {nome:'o caracol', vb:'0 0 300 230', partes:[
+    ['p2','<path d="M40 200 Q40 172 76 172 L250 172 Q284 172 284 198 L284 206 L40 206 Z"/>'], ['p3','<circle cx="262" cy="150" r="28"/>'], ['p1','<circle cx="150" cy="112" r="70"/>']],
+    extra:'<g style="pointer-events:none"><path d="M150 112 m0 -6 a6 6 0 1 1 -6 6 a14 14 0 1 1 14 14 a26 26 0 1 1 -26 -26 a40 40 0 1 1 40 40" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/><circle cx="270" cy="144" r="5" fill="#38364A"/><path d="M256 124 L248 96 M272 124 L282 96" stroke="#38364A" stroke-width="4" stroke-linecap="round"/><circle cx="248" cy="94" r="5" fill="#38364A"/><circle cx="282" cy="94" r="5" fill="#38364A"/></g>'}
+);
+
+/* ================= BARRA DE BOTÕES (sempre visível) ================= */
+function mostrarBarra(html){
+  const b = document.getElementById('barra');
+  b.innerHTML = html; b.classList.add('show'); document.body.classList.add('com-barra');
+  try{ esconderFaixa(); }catch(e){}
+}
+function esconderBarra(){
+  const b = document.getElementById('barra');
+  if(!b) return; b.classList.remove('show'); b.innerHTML=''; document.body.classList.remove('com-barra');
+}
+const BTN_JOGOS = `<button class="btn cinza" onclick="menuJogos()"><span class="emo">🏠</span> Jogos</button>`;
+
+/* ================= JOGOS LIVRES (fora da aventura) ================= */
+const LIVRES = {
+  colorir:{nome:'Colorir', emo:'🎨', niveis:false},
+  quebra:{nome:'Quebra-cabeça', emo:'🧩', niveis:true},
+  sombra:{nome:'Sombras', emo:'🌑', niveis:true},
+  letras:{nome:'Letras', emo:'🔤', niveis:true},
+  numeros:{nome:'Números', emo:'🔢', niveis:true},
+  cores:{nome:'Cores', emo:'🖌️', niveis:true},
+  esconde:{nome:'Esconde-esconde', emo:'🌳', niveis:true},
+  baloes:{nome:'Balões', emo:'🎈', niveis:true},
+  alimentar:{nome:'Hora de comer', emo:'🥕', niveis:true},
+  sequencia:{nome:'Sequência', emo:'➡️', niveis:true}
+};
+let acertosLivre = 0;
+function abrirLivre(tipo){
+  av.livre = tipo; acertosLivre = 0;
+  av.dLivre = av.dLivre || 1;
+  const info = LIVRES[tipo];
+  document.getElementById('livre-titulo').innerHTML = `<span class="emo">${info.emo}</span> ${info.nome}`;
+  const nv = document.getElementById('livre-niveis');
+  nv.style.display = info.niveis ? '' : 'none';
+  pintarNiveis();
+  rodadaLivre();
+}
+function pintarNiveis(){
+  document.querySelectorAll('#livre-niveis .nivel').forEach(b=>b.classList.toggle('on', +b.dataset.n===av.dLivre));
+}
+function nivelLivre(n){ av.dLivre = n; pintarNiveis(); rodadaLivre(); }
+function rodadaLivre(){
+  esconderBarra(); pararSom();
+  av.temaLivre = sortear(ORDEM_TEMAS);
+  av.feito = false; av.guia = null;
+  ATIV[av.livre](av.dLivre);
+  window.scrollTo(0,0);
+}
+
+/* ================= BOLHAS (brincadeira calma) ================= */
+let bolhasTimer = null, bolhasCont = 0;
+function iniciarBolhas(){
+  pararBolhas(); bolhasCont = 0;
+  const area = document.getElementById('bolhas-area');
+  area.innerHTML = '';
+  document.getElementById('bolhas-cont').textContent = '';
+  const nova = ()=>{
+    if(area.children.length >= 12) return;
+    const b = document.createElement('button');
+    const tam = rnd(70, 130);
+    const comBicho = Math.random() < .45 ? sortear(ANIMAIS) : null;
+    b.className = 'bolha';
+    b.style.width = b.style.height = tam+'px'; b.style.fontSize = Math.round(tam*.5)+'px';
+    b.style.left = `calc(${rnd(2, 88)}% - ${tam/2}px)`;
+    b.style.animationDuration = (cfg.anim ? rnd(9, 14) : 30)+'s';
+    b.style.setProperty('--h', `hsl(${rnd(0,360)} 80% 75%)`);
+    if(comBicho){ b.innerHTML = `<span class="emo">${comBicho.e}</span>`; b.dataset.i = comBicho.i; }
+    b.addEventListener('pointerdown', ()=>{
+      if(b.classList.contains('pop')) return;
+      b.classList.add('pop'); estouro(); bolhasCont++;
+      document.getElementById('bolhas-cont').textContent = `🫧 ${bolhasCont}`;
+      if(b.dataset.i){ const x = ANIMAIS[+b.dataset.i]; falar([x.n]); }
+      setTimeout(()=>b.remove(), 320);
+    });
+    b.addEventListener('animationend', e=>{ if(e.animationName==='sobe') b.remove(); });
+    area.appendChild(b);
+  };
+  for(let k=0;k<4;k++) setTimeout(nova, k*500);
+  bolhasTimer = setInterval(nova, 1300);
+  falar(['Estoure as bolhas! Algumas têm bichinhos dentro.']);
+}
+function pararBolhas(){ clearInterval(bolhasTimer); bolhasTimer = null; }
+
 function voltarAventura(){
-  pararSom(); if(synth) synth.cancel();
+  pararSom(); if(synth) synth.cancel(); esconderBarra();
   if(document.getElementById('av-mapa').style.display !== 'none') menuJogos();
   else novaAventura();
 }
