@@ -253,7 +253,7 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 .moita.certo{border-radius:22px;box-shadow:0 0 0 5px var(--ok)}
 /* balões */
 .baloes{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 18px;padding:10px 0 20px}
-.balao-b{width:clamp(58px,17vw,92px);height:clamp(84px,24vw,130px);position:relative;animation:boia 3s ease-in-out infinite}
+.balao-b{touch-action:manipulation;-webkit-user-select:none;user-select:none;width:clamp(58px,17vw,92px);height:clamp(84px,24vw,130px);position:relative;animation:boia 3s ease-in-out infinite}
 .balao-b .forma{position:absolute;left:0;right:0;top:0;height:78%;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.55),transparent 32%),var(--b);border-radius:50% 50% 48% 48%/56% 56% 44% 44%;box-shadow:inset -6px -8px 0 rgba(0,0,0,.08)}
 .balao-b::after{content:"";position:absolute;left:50%;top:78%;width:2px;height:22%;background:#9A94A8}
 .balao-b.pop{animation:estoura .3s ease-out forwards;pointer-events:none}
@@ -291,6 +291,14 @@ main{max-width:1200px;margin:0 auto;padding:14px 16px 60px}
 .cor .cn{font-size:12px;font-weight:800;color:var(--soft)}
 .cor.on{background:#fff;box-shadow:0 0 0 3px var(--ink)}
 .cor.on .bola{transform:scale(1.08)}
+
+/* galeria de desenhos */
+.galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(130px,28vw),1fr));gap:10px;max-width:820px;margin:0 auto}
+.mini-des{background:#fff;border-radius:20px;box-shadow:0 4px 0 var(--line);padding:6px;aspect-ratio:1;display:grid;place-items:center}
+.mini-des:active{transform:scale(.96)}
+.mini-des .desenho{width:100%;height:100%;max-height:none;box-shadow:none;padding:0;border-radius:0;background:none;pointer-events:none}
+.dicas-tg{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:var(--soft)}
+.dicas-tg input{width:22px;height:22px;accent-color:var(--teal)}
 
 /* barra de botões fixa embaixo */
 .barra{position:fixed;left:0;right:0;bottom:0;z-index:45;display:none;justify-content:center;flex-wrap:wrap;gap:10px;padding:14px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(251,247,240,0),rgba(251,247,240,.97) 28%)}
@@ -1342,7 +1350,7 @@ const NUM_F = ['zero','uma','duas','três','quatro','cinco','seis','sete','oito'
 const AMIGOS = ['Cachorro','Gato','Coelho','Pinguim','Panda','Leão','Pato','Elefante'];
 const CORES = {
   vermelho:['#E74C3C','Vermelho'], laranja:['#F39C3D','Laranja'], amarelo:['#F7D046','Amarelo'], verde:['#5DBB63','Verde'],
-  azul:['#4A90E2','Azul'], roxo:['#9B6BD3','Roxo'], rosa:['#F48FB1','Rosa'], marrom:['#A0703C','Marrom'], branco:['#FFFFFF','Branco']
+  azul:['#4A90E2','Azul'], roxo:['#9B6BD3','Roxo'], rosa:['#F48FB1','Rosa'], marrom:['#A0703C','Marrom'], cinza:['#A9A9B8','Cinza'], branco:['#FFFFFF','Branco']
 };
 const av = {fase:0, amigo:null, passo:0, estrelas:0, pontos:[], fala:[], feito:false};
 const bicho = n => ANIMAIS.find(a=>a.n===n);
@@ -1623,15 +1631,22 @@ ATIV.baloes = d => {
   av.bal.plu = plu;
   const frase = `Estoure os balões ${plu}!`;
   painel(`Estoure os balões <span class="cor-tag" style="background:${CORES[alvo][0]}">${plu.toUpperCase()}</span>!`, '',
-    `<div class="baloes">${lista.map((c,k)=>`<button class="balao-b" style="--b:${CORES[c][0]};animation-delay:${(k%5)*.4}s" onclick="estourar(this,'${c}')" aria-label="balão ${c}"><span class="forma"></span></button>`).join('')}</div>`, [frase]);
+    `<div class="baloes" id="baloes">${lista.map((c,k)=>`<button class="balao-b" style="--b:${CORES[c][0]};animation-delay:${(k%5)*.4}s" data-c="${c}" aria-label="balão ${c}"><span class="forma"></span></button>`).join('')}</div>`, [frase]);
+  document.querySelectorAll('#baloes .balao-b').forEach(b=>{
+    const tocar = e=>{ e.preventDefault(); estourar(b, b.dataset.c); };
+    b.addEventListener('pointerdown', tocar);
+    b.addEventListener('click', tocar);
+  });
 };
 function estourar(el, c){
   if(av.feito || el.classList.contains('pop')) return;
   if(c===av.bal.alvo){
     el.classList.add('pop'); estouro(); av.bal.feitos++;
+    el.style.pointerEvents = 'none';
+    setTimeout(()=>{ el.style.visibility = 'hidden'; }, cfg.anim ? 280 : 0);
     if(av.bal.feitos===av.bal.faltam) acertou(null, `Você estourou todos os balões ${av.bal.plu}!`);
     else falar([cap(NUM_M[av.bal.feitos])]);
-  } else { anima(el,'mexe'); fb(`Esse é ${CORES[c][1].toLowerCase()}!`); falar([`Esse é ${CORES[c][1].toLowerCase()}! Estoure os ${av.bal.plu}!`]); }
+  } else { if(el.dataset.aviso && Date.now()-el.dataset.aviso<1200) return; el.dataset.aviso=Date.now(); anima(el,'mexe'); fb(`Esse é ${CORES[c][1].toLowerCase()}!`); falar([`Esse é ${CORES[c][1].toLowerCase()}! Estoure os ${av.bal.plu}!`]); }
 }
 
 /* dar comida (arrastar) */
@@ -1694,13 +1709,13 @@ function arrastavel(el, aoSoltar){
 /* quebra-cabeça */
 ATIV.quebra = async d => {
   const alvo = sortear(animaisDoTema());
-  const [cols, rows] = [[2,1],[2,2],[3,2]][d-1];
+  const [cols, rows] = [[2,2],[3,2],[3,3]][d-1];
   av.alvo = alvo;
   const frase = `Monte ${alvo.a} ${alvo.n}! Arraste as peças para o lugar certo.`;
   painel(`Monte ${alvo.a} ${alvo.n}!`, '', `<div class="quebra" id="qb"></div>`, [frase]);
   const area = document.getElementById('qb');
   const larg = area.clientWidth || 300;
-  const S = Math.round(Math.max(150, Math.min(larg*0.56, window.innerHeight*0.3, 300)));
+  const S = Math.round(Math.max(170, Math.min(larg*0.62, window.innerHeight*0.32, 320)));
   const c = document.createElement('canvas'); c.width=S; c.height=S;
   try{ await document.fonts.load(`${S}px "Noto Color Emoji"`, alvo.e); }catch(e){}
   const ctx = c.getContext('2d'); ctx.textAlign='center'; ctx.textBaseline='middle';
@@ -1728,8 +1743,8 @@ ATIV.quebra = async d => {
       const r = area.getBoundingClientRect(), tb = area.querySelector('.tabuleiro').getBoundingClientRect();
       const cx = x - r.left, cy = y - r.top;
       const naMesa = x>tb.left && x<tb.right && y>tb.top && y<tb.bottom;
-      const perto = Math.hypot(cx-(alvoX+pw/2), cy-(alvoY+ph/2)) < Math.max(pw,ph)*0.55;
-      if(toque || !(perto || (d===1 && naMesa))) return false;
+      const perto = Math.hypot(cx-(alvoX+pw/2), cy-(alvoY+ph/2)) < Math.max(pw,ph)*[0.75,0.6,0.55][d-1];
+      if(toque || !perto) return false;
       el.style.transition = cfg.anim ? 'left .2s, top .2s' : 'none';
       el.style.transform=''; el.style.left = alvoX+'px'; el.style.top = alvoY+'px';
       el.classList.add('posta'); estouro();
@@ -1742,58 +1757,218 @@ ATIV.quebra = async d => {
 };
 
 /* colorir livre */
-const DESENHOS = [
-  {nome:'o peixe', vb:'0 0 300 200', partes:[
-    ['p1','<path d="M220 100 L288 48 L288 152 Z"/>'], ['p2','<path d="M105 52 Q140 6 178 50 Z"/>'],
-    ['p3','<ellipse cx="140" cy="100" rx="88" ry="56"/>'], ['p4','<path d="M150 46 Q170 100 150 154 Q132 100 150 46Z"/>']],
-    extra:'<circle cx="92" cy="88" r="9" fill="#38364A"/><path d="M60 112 Q72 120 84 112" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/>'},
-  {nome:'a borboleta', vb:'0 0 300 260', partes:[
-    ['p1','<path d="M143 100 C 60 20, 10 90, 60 140 C 90 160, 130 140, 143 120 Z"/>'], ['p2','<path d="M143 130 C 90 140, 40 200, 90 230 C 120 245, 140 200, 143 170 Z"/>'],
-    ['p3','<path d="M157 100 C 240 20, 290 90, 240 140 C 210 160, 170 140, 157 120 Z"/>'], ['p4','<path d="M157 130 C 210 140, 260 200, 210 230 C 180 245, 160 200, 157 170 Z"/>']],
-    extra:'<rect x="142" y="62" width="16" height="150" rx="8" fill="#6B5444"/><path d="M146 66 Q130 34 116 24 M154 66 Q170 34 184 24" fill="none" stroke="#6B5444" stroke-width="4" stroke-linecap="round"/>'},
-  {nome:'a flor', vb:'0 0 300 320', partes:[
-    ['p6','<rect x="144" y="150" width="12" height="150" rx="6"/>'], ['p7','<path d="M156 245 Q210 200 232 242 Q200 272 156 258Z"/>'],
-    ['p1','<circle cx="150" cy="56" r="34"/>'], ['p2','<circle cx="200" cy="93" r="34"/>'], ['p3','<circle cx="181" cy="151" r="34"/>'],
-    ['p4','<circle cx="119" cy="151" r="34"/>'], ['p5','<circle cx="100" cy="93" r="34"/>'], ['p0','<circle cx="150" cy="108" r="30"/>']], extra:''},
-  {nome:'a casinha', vb:'0 0 300 260', partes:[
-    ['p5','<rect x="192" y="48" width="26" height="60"/>'], ['p1','<rect x="60" y="120" width="180" height="122"/>'],
-    ['p2','<path d="M38 126 L150 34 L262 126 Z"/>'], ['p3','<rect x="130" y="172" width="42" height="70" rx="4"/>'],
-    ['p4','<rect x="80" y="146" width="36" height="36" rx="3"/>'], ['p6','<rect x="186" y="146" width="36" height="36" rx="3"/>']], extra:''},
-  {nome:'o sorvete', vb:'0 0 200 300', partes:[
-    ['p1','<path d="M58 138 L142 138 L100 286 Z"/>'], ['p2','<circle cx="100" cy="122" r="46"/>'],
-    ['p3','<circle cx="100" cy="72" r="38"/>'], ['p4','<circle cx="104" cy="28" r="13"/>']], extra:''}
-];
 let corAtual = 'vermelho';
 function paletaHTML(cores, acao){
   return `<div class="paleta">${cores.map(c=>`<button class="cor ${c===corAtual?'on':''}" data-c="${c}" style="--k:${CORES[c][0]}" onclick="${acao}('${c}')" aria-label="${CORES[c][1]}"><span class="bola"></span><span class="cn">${CORES[c][1]}</span></button>`).join('')}</div>`;
 }
+/* colorir: cada parte = [id, forma SVG, nome falado]. Partes com o mesmo id formam um grupo (ex.: as duas orelhas). */
+const OLHO = (x,y,r=8)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#38364A"/><circle cx="${x+r*.35}" cy="${y-r*.35}" r="${r*.32}" fill="#fff"/>`;
+const DESENHOS = [
+  {nome:'o gato', emo:'🐱', vb:'0 0 300 300', partes:[
+    ['rabo','<path d="M212 236 Q282 232 270 166 Q266 150 252 158 Q262 214 204 222 Z"/>','o rabo'],
+    ['corpo','<ellipse cx="150" cy="216" rx="72" ry="64"/>','o corpo'],
+    ['patas','<ellipse cx="122" cy="274" rx="24" ry="13"/>','as patinhas'], ['patas','<ellipse cx="178" cy="274" rx="24" ry="13"/>','as patinhas'],
+    ['orelhas','<path d="M98 86 L92 28 L142 64 Z"/>','as orelhas'], ['orelhas','<path d="M202 86 L208 28 L158 64 Z"/>','as orelhas'],
+    ['cabeca','<circle cx="150" cy="120" r="62"/>','a cabeça']],
+    extra:`<g style="pointer-events:none">${OLHO(127,114,9)}${OLHO(173,114,9)}<path d="M143 132 L157 132 L150 141 Z" fill="#F48FB1" stroke="#38364A" stroke-width="2"/><path d="M150 141 Q142 153 132 147 M150 141 Q158 153 168 147 M104 134 L70 126 M104 144 L68 148 M196 134 L230 126 M196 144 L232 148" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/></g>`},
+  {nome:'o cachorro', emo:'🐶', vb:'0 0 300 300', partes:[
+    ['coleira','<rect x="96" y="206" width="108" height="20" rx="10"/>','a coleira'],
+    ['cabeca','<ellipse cx="150" cy="138" rx="78" ry="72"/>','a cabeça'],
+    ['mancha','<circle cx="118" cy="112" r="22"/>','a manchinha do olho'],
+    ['focinho','<ellipse cx="150" cy="172" rx="42" ry="30"/>','o focinho'],
+    ['lingua','<path d="M138 190 Q150 218 162 190 Z"/>','a língua'],
+    ['orelhas','<path d="M80 96 Q38 104 46 186 Q58 214 90 190 Q98 148 96 108 Z"/>','as orelhas'], ['orelhas','<path d="M220 96 Q262 104 254 186 Q242 214 210 190 Q202 148 204 108 Z"/>','as orelhas'],
+    ['medalha','<circle cx="150" cy="238" r="14"/>','a medalha da coleira']],
+    extra:`<g style="pointer-events:none">${OLHO(120,116,8)}${OLHO(180,116,8)}<ellipse cx="150" cy="160" rx="15" ry="11" fill="#38364A"/><path d="M150 171 L150 184 M150 184 Q138 194 128 186 M150 184 Q162 194 172 186" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/></g>`},
+  {nome:'o coelho', emo:'🐰', vb:'0 0 300 300', partes:[
+    ['corpo','<ellipse cx="150" cy="256" rx="66" ry="40"/>','o corpo'],
+    ['orelhas','<ellipse cx="120" cy="66" rx="21" ry="56"/>','as orelhas'], ['orelhas','<ellipse cx="180" cy="66" rx="21" ry="56"/>','as orelhas'],
+    ['dentro','<ellipse cx="120" cy="72" rx="9" ry="38"/>','o dentro das orelhas'], ['dentro','<ellipse cx="180" cy="72" rx="9" ry="38"/>','o dentro das orelhas'],
+    ['cabeca','<circle cx="150" cy="160" r="62"/>','a cabeça'],
+    ['cenoura','<path d="M176 272 L244 212 Q262 200 276 214 Q288 230 272 244 Z"/>','a cenoura'],
+    ['folhas','<path d="M262 208 Q250 178 264 170 Q274 190 272 204 Q282 180 296 184 Q292 204 276 214 Z"/>','as folhas da cenoura']],
+    extra:`<g style="pointer-events:none">${OLHO(127,152,8)}${OLHO(173,152,8)}<ellipse cx="150" cy="172" rx="9" ry="6" fill="#F48FB1" stroke="#38364A" stroke-width="2"/><path d="M150 178 Q140 190 130 184 M150 178 Q160 190 170 184" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/><rect x="143" y="186" width="14" height="12" rx="2" fill="#fff" stroke="#38364A" stroke-width="2"/></g>`},
+  {nome:'o pintinho', emo:'🐤', vb:'0 0 300 300', partes:[
+    ['pes','<path d="M102 288 L120 262 L138 288 Z"/>','os pezinhos'], ['pes','<path d="M162 288 L180 262 L198 288 Z"/>','os pezinhos'],
+    ['corpo','<circle cx="150" cy="192" r="80"/>','o corpo'],
+    ['asas','<path d="M86 188 Q56 168 66 216 Q86 234 110 210 Z"/>','as asinhas'], ['asas','<path d="M214 188 Q244 168 234 216 Q214 234 190 210 Z"/>','as asinhas'],
+    ['cabeca','<circle cx="150" cy="104" r="56"/>','a cabeça'],
+    ['topete','<path d="M138 52 Q144 22 152 46 Q160 24 164 52 Z"/>','o topete'],
+    ['bico','<path d="M136 112 L150 134 L164 112 Z"/>','o bico']],
+    extra:`<g style="pointer-events:none">${OLHO(128,98,8)}${OLHO(172,98,8)}<circle cx="112" cy="122" r="9" fill="#F48FB1" opacity=".6"/><circle cx="188" cy="122" r="9" fill="#F48FB1" opacity=".6"/></g>`},
+  {nome:'o porquinho', emo:'🐷', vb:'0 0 300 300', partes:[
+    ['orelhas','<path d="M78 96 L64 36 L122 70 Z"/>','as orelhas'], ['orelhas','<path d="M222 96 L236 36 L178 70 Z"/>','as orelhas'],
+    ['cabeca','<circle cx="150" cy="158" r="96"/>','a cabeça'],
+    ['bochechas','<circle cx="92" cy="186" r="17"/>','as bochechas'], ['bochechas','<circle cx="208" cy="186" r="17"/>','as bochechas'],
+    ['focinho','<ellipse cx="150" cy="182" rx="44" ry="31"/>','o focinho']],
+    extra:`<g style="pointer-events:none">${OLHO(118,132,9)}${OLHO(182,132,9)}<ellipse cx="135" cy="182" rx="7" ry="10" fill="#38364A"/><ellipse cx="165" cy="182" rx="7" ry="10" fill="#38364A"/><path d="M122 226 Q150 244 178 226" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/></g>`},
+  {nome:'o elefante', emo:'🐘', vb:'0 0 300 300', partes:[
+    ['orelhas','<path d="M96 104 Q14 82 26 168 Q38 236 106 198 Z"/>','as orelhas'], ['orelhas','<path d="M204 104 Q286 82 274 168 Q262 236 194 198 Z"/>','as orelhas'],
+    ['cabeca','<ellipse cx="150" cy="138" rx="72" ry="76"/>','a cabeça'],
+    ['presas','<path d="M118 196 Q112 226 128 236 Q126 214 132 200 Z"/>','os dentes compridos'], ['presas','<path d="M182 196 Q188 226 172 236 Q174 214 168 200 Z"/>','os dentes compridos'],
+    ['tromba','<path d="M128 176 Q124 250 148 278 Q172 292 182 272 Q164 258 172 176 Z"/>','a tromba']],
+    extra:`<g style="pointer-events:none">${OLHO(124,128,8)}${OLHO(176,128,8)}<path d="M138 210 Q150 214 162 210 M140 232 Q152 236 164 230 M146 254 Q156 258 166 252" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/></g>`},
+  {nome:'a coruja', emo:'🦉', vb:'0 0 300 300', partes:[
+    ['orelhas','<path d="M82 76 L92 30 L124 64 Z"/>','os tufinhos da cabeça'], ['orelhas','<path d="M218 76 L208 30 L176 64 Z"/>','os tufinhos da cabeça'],
+    ['corpo','<ellipse cx="150" cy="158" rx="92" ry="108"/>','o corpo'],
+    ['barriga','<ellipse cx="150" cy="200" rx="56" ry="58"/>','a barriga'],
+    ['asas','<path d="M64 140 Q36 206 82 252 Q92 196 80 142 Z"/>','as asas'], ['asas','<path d="M236 140 Q264 206 218 252 Q208 196 220 142 Z"/>','as asas'],
+    ['olhos','<circle cx="114" cy="118" r="33"/>','em volta dos olhos'], ['olhos','<circle cx="186" cy="118" r="33"/>','em volta dos olhos'],
+    ['bico','<path d="M139 142 L161 142 L150 164 Z"/>','o bico'],
+    ['galho','<rect x="30" y="262" width="240" height="20" rx="10"/>','o galho'],
+    ['pes','<ellipse cx="124" cy="262" rx="15" ry="9"/>','os pezinhos'], ['pes','<ellipse cx="176" cy="262" rx="15" ry="9"/>','os pezinhos']],
+    extra:`<g style="pointer-events:none">${OLHO(114,118,14)}${OLHO(186,118,14)}<path d="M128 186 l8 8 l8 -8 M156 186 l8 8 l8 -8 M142 212 l8 8 l8 -8" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round" opacity=".6"/></g>`},
+  {nome:'a baleia', emo:'🐳', vb:'0 0 300 300', partes:[
+    ['mar','<path d="M0 238 Q38 222 75 238 T150 238 T225 238 T300 238 L300 300 L0 300 Z"/>','o mar'],
+    ['jato','<path d="M112 84 Q100 52 82 46 Q108 44 120 70 Q128 38 150 34 Q134 54 128 86 Z"/>','o jato de água'],
+    ['cauda','<path d="M240 166 Q270 120 290 108 Q286 150 268 166 Q290 186 292 218 Q268 202 240 182 Z"/>','a cauda'],
+    ['corpo','<path d="M38 172 Q38 92 150 92 Q244 92 252 162 Q256 206 210 218 L82 218 Q38 214 38 172 Z"/>','o corpo'],
+    ['barriga','<path d="M60 196 Q150 232 236 196 Q228 214 210 218 L82 218 Q66 212 60 196 Z"/>','a barriga']],
+    extra:`<g style="pointer-events:none">${OLHO(88,156,8)}<path d="M64 180 Q84 194 108 184" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/></g>`},
+  {nome:'o sapo', emo:'🐸', vb:'0 0 300 300', partes:[
+    ['folha','<path d="M10 282 Q10 260 150 258 Q290 260 290 282 Q290 298 150 298 Q10 298 10 282 Z"/>','a folha onde ele está'],
+    ['patas','<path d="M62 244 Q28 266 48 286 L98 286 Q102 262 86 244 Z"/>','as patas'], ['patas','<path d="M238 244 Q272 266 252 286 L202 286 Q198 262 214 244 Z"/>','as patas'],
+    ['corpo','<ellipse cx="150" cy="198" rx="96" ry="70"/>','o corpo'],
+    ['olhos','<circle cx="104" cy="118" r="34"/>','os olhos'], ['olhos','<circle cx="196" cy="118" r="34"/>','os olhos'],
+    ['barriga','<ellipse cx="150" cy="238" rx="52" ry="28"/>','a barriga']],
+    extra:`<g style="pointer-events:none">${OLHO(104,118,14)}${OLHO(196,118,14)}<path d="M100 176 Q150 212 200 176" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/></g>`},
+  {nome:'a abelha', emo:'🐝', vb:'0 0 300 300', partes:[
+    ['asas','<ellipse cx="128" cy="86" rx="38" ry="28"/>','as asas'], ['asas','<ellipse cx="190" cy="80" rx="38" ry="28"/>','as asas'],
+    ['ferrao','<path d="M244 156 L284 166 L244 178 Z"/>','o ferrão'],
+    ['corpo','<ellipse cx="158" cy="166" rx="92" ry="68"/>','o corpo'],
+    ['listras','<path d="M128 102 Q112 166 128 230 L152 234 Q136 166 152 98 Z"/>','as listras'], ['listras','<path d="M186 100 Q202 166 186 232 L210 226 Q226 166 210 106 Z"/>','as listras'],
+    ['cabeca','<circle cx="76" cy="160" r="50"/>','a cabeça']],
+    extra:`<g style="pointer-events:none">${OLHO(64,150,8)}<path d="M54 176 Q70 190 88 178 M64 114 Q52 84 40 80 M84 112 Q90 82 102 74" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="80" r="6" fill="#38364A"/><circle cx="102" cy="74" r="6" fill="#38364A"/></g>`},
+  {nome:'o peixe', emo:'🐠', vb:'0 0 300 220', partes:[
+    ['cauda','<path d="M220 110 L288 56 L288 164 Z"/>','a cauda'],
+    ['barbatana','<path d="M104 62 Q140 10 180 58 Z"/>','a barbatana de cima'],
+    ['corpo','<ellipse cx="140" cy="110" rx="90" ry="58"/>','o corpo'],
+    ['listra','<path d="M152 54 Q172 110 152 166 Q132 110 152 54Z"/>','a listra'],
+    ['bolhas','<circle cx="36" cy="58" r="10"/>','as bolhas'], ['bolhas','<circle cx="22" cy="30" r="7"/>','as bolhas']],
+    extra:`<g style="pointer-events:none">${OLHO(92,98,9)}<path d="M58 122 Q70 130 82 122" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/></g>`},
+  {nome:'a borboleta', emo:'🦋', vb:'0 0 300 260', partes:[
+    ['asacima','<path d="M143 100 C 60 20, 10 90, 60 140 C 90 160, 130 140, 143 120 Z"/>','as asas de cima'], ['asacima','<path d="M157 100 C 240 20, 290 90, 240 140 C 210 160, 170 140, 157 120 Z"/>','as asas de cima'],
+    ['asabaixo','<path d="M143 130 C 90 140, 40 200, 90 230 C 120 245, 140 200, 143 170 Z"/>','as asas de baixo'], ['asabaixo','<path d="M157 130 C 210 140, 260 200, 210 230 C 180 245, 160 200, 157 170 Z"/>','as asas de baixo'],
+    ['bolinhas','<circle cx="78" cy="96" r="14"/>','as bolinhas das asas'], ['bolinhas','<circle cx="222" cy="96" r="14"/>','as bolinhas das asas']],
+    extra:'<g style="pointer-events:none"><rect x="142" y="62" width="16" height="150" rx="8" fill="#6B5444"/><path d="M146 66 Q130 34 116 24 M154 66 Q170 34 184 24" fill="none" stroke="#6B5444" stroke-width="4" stroke-linecap="round"/></g>'},
+  {nome:'a joaninha', emo:'🐞', vb:'0 0 260 240', partes:[
+    ['asas','<path d="M130 58 A86 86 0 0 0 130 228 Z"/>','as asas'], ['asas','<path d="M130 58 A86 86 0 0 1 130 228 Z"/>','as asas'], ['cabeca','<circle cx="130" cy="52" r="30"/>','a cabeça']],
+    extra:'<g style="pointer-events:none" fill="#38364A"><circle cx="92" cy="110" r="13"/><circle cx="168" cy="110" r="13"/><circle cx="84" cy="170" r="11"/><circle cx="176" cy="170" r="11"/><circle cx="110" cy="205" r="9"/><circle cx="150" cy="205" r="9"/><rect x="128" y="58" width="4" height="170"/><path d="M118 26 Q106 6 96 4 M142 26 Q154 6 164 4" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/></g>'},
+  {nome:'a tartaruga', emo:'🐢', vb:'0 0 300 220', partes:[
+    ['patas','<ellipse cx="90" cy="168" rx="22" ry="16"/>','as patinhas'], ['patas','<ellipse cx="190" cy="168" rx="22" ry="16"/>','as patinhas'], ['patas','<path d="M50 130 L18 140 L50 146 Z"/>','as patinhas'],
+    ['cabeca','<circle cx="236" cy="118" r="26"/>','a cabeça'], ['casco','<path d="M58 140 Q60 60 140 56 Q220 60 222 140 Z"/>','o casco'], ['borda','<rect x="52" y="136" width="176" height="18" rx="9"/>','a borda do casco']],
+    extra:`<g style="pointer-events:none">${OLHO(244,112,6)}<path d="M110 70 L140 100 L170 70 M140 100 L140 138 M100 138 L110 104 L140 100 L170 104 L180 138" fill="none" stroke="#38364A" stroke-width="3" opacity=".55"/></g>`},
+  {nome:'o caracol', emo:'🐌', vb:'0 0 300 230', partes:[
+    ['corpo','<path d="M40 200 Q40 172 76 172 L250 172 Q284 172 284 198 L284 206 L40 206 Z"/>','o corpo'], ['cabeca','<circle cx="262" cy="150" r="28"/>','a cabeça'], ['casinha','<circle cx="150" cy="112" r="70"/>','a casinha']],
+    extra:`<g style="pointer-events:none"><path d="M150 112 m0 -6 a6 6 0 1 1 -6 6 a14 14 0 1 1 14 14 a26 26 0 1 1 -26 -26 a40 40 0 1 1 40 40" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/>${OLHO(270,144,5)}<path d="M256 124 L248 96 M272 124 L282 96" stroke="#38364A" stroke-width="4" stroke-linecap="round"/><circle cx="248" cy="94" r="5" fill="#38364A"/><circle cx="282" cy="94" r="5" fill="#38364A"/></g>`},
+  {nome:'a flor', emo:'🌼', vb:'0 0 300 320', partes:[
+    ['caule','<rect x="144" y="150" width="12" height="150" rx="6"/>','o caule'], ['folha','<path d="M156 245 Q210 200 232 242 Q200 272 156 258Z"/>','a folha'],
+    ['petalas','<circle cx="150" cy="56" r="34"/>','as pétalas'], ['petalas','<circle cx="200" cy="93" r="34"/>','as pétalas'], ['petalas','<circle cx="181" cy="151" r="34"/>','as pétalas'],
+    ['petalas','<circle cx="119" cy="151" r="34"/>','as pétalas'], ['petalas','<circle cx="100" cy="93" r="34"/>','as pétalas'], ['miolo','<circle cx="150" cy="108" r="30"/>','o miolo da flor']],
+    extra:'<g style="pointer-events:none"><circle cx="140" cy="102" r="4" fill="#38364A"/><circle cx="160" cy="102" r="4" fill="#38364A"/><path d="M138 116 Q150 126 162 116" fill="none" stroke="#38364A" stroke-width="3" stroke-linecap="round"/></g>'},
+  {nome:'a casinha', emo:'🏠', vb:'0 0 300 260', partes:[
+    ['chamine','<rect x="192" y="48" width="26" height="60"/>','a chaminé'], ['parede','<rect x="60" y="120" width="180" height="122"/>','a parede'],
+    ['telhado','<path d="M38 126 L150 34 L262 126 Z"/>','o telhado'], ['porta','<rect x="130" y="172" width="42" height="70" rx="4"/>','a porta'],
+    ['janelas','<rect x="80" y="146" width="36" height="36" rx="3"/>','as janelas'], ['janelas','<rect x="186" y="146" width="36" height="36" rx="3"/>','as janelas'],
+    ['grama','<rect x="10" y="240" width="280" height="16" rx="8"/>','a grama']], extra:'<circle cx="164" cy="208" r="4" fill="#38364A" style="pointer-events:none"/>'},
+  {nome:'o sorvete', emo:'🍦', vb:'0 0 200 300', partes:[
+    ['casquinha','<path d="M58 138 L142 138 L100 286 Z"/>','a casquinha'], ['bola1','<circle cx="100" cy="122" r="46"/>','a bola de baixo'],
+    ['bola2','<circle cx="100" cy="72" r="38"/>','a bola de cima'], ['cereja','<circle cx="104" cy="28" r="13"/>','a cereja']],
+    extra:'<path d="M72 160 L128 160 M80 190 L120 190 M88 220 L112 220" stroke="#38364A" stroke-width="3" opacity=".4" style="pointer-events:none"/>'},
+  {nome:'o arco-íris', emo:'🌈', vb:'0 0 300 190', partes:[
+    ['f1','<path d="M10 180 A140 140 0 0 1 290 180 L268 180 A118 118 0 0 0 32 180 Z"/>','a faixa de fora'],
+    ['f2','<path d="M32 180 A118 118 0 0 1 268 180 L246 180 A96 96 0 0 0 54 180 Z"/>','a segunda faixa'],
+    ['f3','<path d="M54 180 A96 96 0 0 1 246 180 L224 180 A74 74 0 0 0 76 180 Z"/>','a faixa do meio'],
+    ['f4','<path d="M76 180 A74 74 0 0 1 224 180 L202 180 A52 52 0 0 0 98 180 Z"/>','a quarta faixa'],
+    ['f5','<path d="M98 180 A52 52 0 0 1 202 180 L180 180 A30 30 0 0 0 120 180 Z"/>','a faixa de dentro'],
+    ['nuvens','<path d="M4 186 Q4 160 26 162 Q34 144 54 154 Q72 150 72 172 Q76 188 60 188 L12 188 Q4 188 4 186Z"/>','as nuvens'],
+    ['nuvens','<path d="M296 186 Q296 160 274 162 Q266 144 246 154 Q228 150 228 172 Q224 188 240 188 L288 188 Q296 188 296 186Z"/>','as nuvens']], extra:''},
+  {nome:'o foguete', emo:'🚀', vb:'0 0 300 300', partes:[
+    ['fogo','<path d="M118 200 Q150 296 182 200 Z"/>','o fogo'],
+    ['aletas','<path d="M102 150 L62 214 L104 198 Z"/>','as asinhas'], ['aletas','<path d="M198 150 L238 214 L196 198 Z"/>','as asinhas'],
+    ['corpo','<path d="M150 24 Q206 78 202 202 L98 202 Q94 78 150 24 Z"/>','o corpo do foguete'],
+    ['ponta','<path d="M150 24 Q174 46 186 72 L114 72 Q126 46 150 24 Z"/>','a ponta'],
+    ['janela','<circle cx="150" cy="118" r="25"/>','a janela'],
+    ['estrelas','<path d="M44 62 l6 12 l13 2 l-10 9 l3 13 l-12 -7 l-12 7 l3 -13 l-10 -9 l13 -2 Z"/>','as estrelas'], ['estrelas','<path d="M250 36 l5 10 l11 2 l-8 7 l2 11 l-10 -6 l-10 6 l2 -11 l-8 -7 l11 -2 Z"/>','as estrelas']], extra:''},
+  {nome:'o carro', emo:'🚗', vb:'0 0 300 260', partes:[
+    ['estrada','<rect x="4" y="226" width="292" height="22" rx="11"/>','a estrada'],
+    ['corpo','<path d="M26 206 L26 164 Q32 146 60 142 L94 140 L124 98 L202 98 L236 140 L266 146 Q278 152 278 172 L278 206 Z"/>','o carro'],
+    ['janela','<path d="M134 110 L196 110 L218 140 L134 140 Z"/>','a janela'], ['janela2','<path d="M106 140 L128 110 L124 140 Z"/>','a janelinha'],
+    ['rodas','<circle cx="84" cy="210" r="28"/>','as rodas'], ['rodas','<circle cx="220" cy="210" r="28"/>','as rodas'],
+    ['farol','<circle cx="264" cy="166" r="9"/>','o farol']],
+    extra:'<g style="pointer-events:none" fill="#38364A"><circle cx="84" cy="210" r="9"/><circle cx="220" cy="210" r="9"/><rect x="150" y="150" width="20" height="5" rx="2.5"/></g>'}
+];
+const PALETA_COLORIR = ['vermelho','laranja','amarelo','verde','azul','roxo','rosa','marrom','cinza','branco'];
+
+/* ---------- colorir com dicas ---------- */
 function desenhoHTML(ds, clicavel){
-  return `<svg class="desenho" viewBox="${ds.vb}">${ds.partes.map(([id,s])=>s.replace(/^<(\w+)/, `<$1 class="parte" data-id="${id}" fill="#FFFFFF" stroke="#38364A" stroke-width="4" stroke-linejoin="round" ${clicavel?`onclick="pintarParte(this)"`:''}`)).join('')}${ds.extra||''}</svg>`;
+  return `<svg class="desenho" viewBox="${ds.vb}">${ds.partes.map(([id,s],k)=>s.replace(/^<(\w+)/, `<$1 class="parte" data-id="${id}" data-k="${k}" fill="#FFFFFF" stroke="#38364A" stroke-width="4" stroke-linejoin="round" ${clicavel?`onclick="pintarParte(this)"`:''}`)).join('')}${ds.extra||''}</svg>`;
+}
+function galeriaDesenhos(){
+  painel('Escolha um desenho', '', `<div class="galeria">${DESENHOS.map((ds,k)=>`<button class="mini-des" onclick="comecarColorir(${k})" aria-label="${ds.nome}">${desenhoHTML(ds,false)}</button>`).join('')}</div>`, ['Qual desenho você quer pintar?']);
 }
 ATIV.colorir = d => {
-  const ds = sortear(DESENHOS);
-  corAtual = sortear(['vermelho','azul','amarelo','verde','rosa','roxo']);
-  av.col = {ds, pintadas:new Set()};
-  const frase = `Vamos colorir ${ds.nome}! Escolha uma cor e toque no desenho.`;
-  painel(`Vamos colorir ${ds.nome}!`, '', `<div class="colorir">${desenhoHTML(ds, true)}${paletaHTML(['vermelho','laranja','amarelo','verde','azul','roxo','rosa','marrom','branco'], 'escolherCor')}
-    <button class="btn b-ok" id="col-pronto" style="margin:10px auto 0;visibility:hidden" onclick="colorirPronto()">Pronto! <span class="emo">✅</span></button></div>`, [frase]);
+  if(av.livre) return galeriaDesenhos();
+  comecarColorir(Math.floor(Math.random()*DESENHOS.length));
 };
+function comecarColorir(k){
+  const ds = DESENHOS[k];
+  corAtual = sortear(['vermelho','azul','amarelo','verde','rosa','roxo','laranja']);
+  av.col = {ds, k, pintadas:new Set()};
+  const dicas = cfg.dicas !== false;
+  const titulo = `Vamos colorir ${ds.nome}!`;
+  painel(titulo, '', `<div class="colorir">${desenhoHTML(ds, true)}${paletaHTML(PALETA_COLORIR, 'escolherCor')}
+    <label class="dicas-tg"><input type="checkbox" ${dicas?'checked':''} onchange="cfg.dicas=this.checked;salvar();dicaColorir(true)"> 💡 Dicas de onde pintar</label></div>`,
+    ()=>{ const p = proximaParte(); falar([p && cfg.dicas!==false ? `${titulo} Escolha uma cor e pinte ${p[2]}!` : `${titulo} Escolha uma cor e toque no desenho.`]); });
+  mostrarBarra(`<button class="btn b-ok" onclick="colorirPronto()">Pronto! <span class="emo">✅</span></button>${av.livre?`<button class="btn cinza" onclick="galeriaDesenhos();esconderBarra()"><span class="emo">🖼️</span> Desenhos</button>`:''}`);
+  dicaColorir(false);
+}
+function ordemDicas(){
+  // maiores primeiro (cabeça, corpo...), depois os detalhes
+  const els = [...document.querySelectorAll('.desenho .parte')];
+  const area = {};
+  els.forEach(e=>{ let a=0; try{ const b=e.getBBox(); a=b.width*b.height; }catch(err){} area[e.dataset.id]=(area[e.dataset.id]||0)+a; });
+  const ids = [...new Set(av.col.ds.partes.map(p=>p[0]))];
+  return ids.sort((x,y)=>(area[y]||0)-(area[x]||0));
+}
+function proximaParte(){
+  const ds = av.col && av.col.ds; if(!ds) return null;
+  if(!av.col.ordem) av.col.ordem = ordemDicas();
+  for(const id of av.col.ordem){
+    const k = ds.partes.findIndex((p,i)=>p[0]===id && !av.col.pintadas.has(i));
+    if(k>=0) return ds.partes[k];
+  }
+  return null;
+}
+function dicaColorir(falarDica){
+  document.querySelectorAll('.desenho .parte').forEach(e=>e.classList.remove('alvo'));
+  if(cfg.dicas===false || av.feito) return;
+  const p = proximaParte(); if(!p) return;
+  document.querySelectorAll(`.desenho .parte[data-id="${p[0]}"]`).forEach((e)=>{ if(!av.col.pintadas.has(+e.dataset.k)) e.classList.add('alvo'); });
+  if(falarDica) falar([`Agora pinte ${p[2]}!`]);
+}
+function pintarParte(el){
+  if(av.feito || av.guia) return;
+  const k = +el.dataset.k;
+  el.setAttribute('fill', CORES[corAtual][0]);
+  anima(el,'pinta');
+  const antes = proximaParte();
+  if(corAtual==='branco') av.col.pintadas.delete(k); else av.col.pintadas.add(k);
+  const tot = av.col.ds.partes.length;
+  if(av.col.pintadas.size===tot){ document.querySelectorAll('.desenho .parte').forEach(e=>e.classList.remove('alvo')); return colorirPronto(); }
+  const depois = proximaParte();
+  // só fala a próxima dica quando o grupo sugerido terminou
+  dicaColorir(antes && depois && antes[0]!==depois[0]);
+}
+function colorirPronto(){ if(!av.feito){ document.querySelectorAll('.desenho .parte').forEach(e=>e.classList.remove('alvo')); acertou(null, 'Que lindo jogo! Ficou muito bonito!'); } }
+
 function escolherCor(c){
   corAtual = c;
   document.querySelectorAll('.paleta .cor').forEach(b=>b.classList.toggle('on', b.dataset.c===c));
   if(av.guia){ checarGuia(c); return; }
   falar([CORES[c][1]]);
 }
-function pintarParte(el){
-  if(av.feito || av.guia) return;
-  el.setAttribute('fill', CORES[corAtual][0]);
-  anima(el,'pinta');
-  if(corAtual==='branco') av.col.pintadas.delete(el.dataset.id); else av.col.pintadas.add(el.dataset.id);
-  const n = av.col.pintadas.size, tot = av.col.ds.partes.length;
-  document.getElementById('col-pronto').style.visibility = n>0 ? 'visible' : 'hidden';
-  if(n===tot) colorirPronto();
-}
-function colorirPronto(){ if(!av.feito) acertou(null, 'Que lindo jogo!'); }
+
 
 /* pintar com a cor certa (guiado) */
 const GUIADOS = [
@@ -1884,28 +2059,6 @@ function respNumero(el, v){
   if(v===av.resp) acertou(el, `Isso! Tem ${nomes[v]}!`);
   else errou(el, `Hmm, não são ${nomes[v]}. Conte de novo, com o dedinho!`);
 }
-
-/* mais desenhos para colorir */
-DESENHOS.push(
-  {nome:'a joaninha', vb:'0 0 260 240', partes:[
-    ['p2','<path d="M130 58 A86 86 0 0 0 130 228 Z"/>'], ['p3','<path d="M130 58 A86 86 0 0 1 130 228 Z"/>'], ['p1','<circle cx="130" cy="52" r="30"/>']],
-    extra:'<g style="pointer-events:none" fill="#38364A"><circle cx="92" cy="110" r="13"/><circle cx="168" cy="110" r="13"/><circle cx="84" cy="170" r="11"/><circle cx="176" cy="170" r="11"/><circle cx="110" cy="205" r="9"/><circle cx="150" cy="205" r="9"/><rect x="128" y="58" width="4" height="170"/></g><path d="M118 26 Q106 6 96 4 M142 26 Q154 6 164 4" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/>'},
-  {nome:'a tartaruga', vb:'0 0 300 220', partes:[
-    ['p3','<ellipse cx="90" cy="168" rx="22" ry="16"/>'], ['p4','<ellipse cx="190" cy="168" rx="22" ry="16"/>'], ['p5','<path d="M50 130 L18 140 L50 146 Z"/>'],
-    ['p2','<circle cx="236" cy="118" r="26"/>'], ['p1','<path d="M58 140 Q60 60 140 56 Q220 60 222 140 Z"/>'], ['p6','<rect x="52" y="136" width="176" height="18" rx="9"/>']],
-    extra:'<g style="pointer-events:none"><circle cx="244" cy="112" r="5" fill="#38364A"/><path d="M110 70 L140 100 L170 70 M140 100 L140 138 M100 138 L110 104 L140 100 L170 104 L180 138" fill="none" stroke="#38364A" stroke-width="3" opacity=".55"/></g>'},
-  {nome:'o arco-íris', vb:'0 0 300 190', partes:[
-    ['p1','<path d="M10 180 A140 140 0 0 1 290 180 L268 180 A118 118 0 0 0 32 180 Z"/>'],
-    ['p2','<path d="M32 180 A118 118 0 0 1 268 180 L246 180 A96 96 0 0 0 54 180 Z"/>'],
-    ['p3','<path d="M54 180 A96 96 0 0 1 246 180 L224 180 A74 74 0 0 0 76 180 Z"/>'],
-    ['p4','<path d="M76 180 A74 74 0 0 1 224 180 L202 180 A52 52 0 0 0 98 180 Z"/>'],
-    ['p5','<path d="M98 180 A52 52 0 0 1 202 180 L180 180 A30 30 0 0 0 120 180 Z"/>'],
-    ['p6','<path d="M4 186 Q4 160 26 162 Q34 144 54 154 Q72 150 72 172 Q76 188 60 188 L12 188 Q4 188 4 186Z"/>'],
-    ['p7','<path d="M296 186 Q296 160 274 162 Q266 144 246 154 Q228 150 228 172 Q224 188 240 188 L288 188 Q296 188 296 186Z"/>']], extra:''},
-  {nome:'o caracol', vb:'0 0 300 230', partes:[
-    ['p2','<path d="M40 200 Q40 172 76 172 L250 172 Q284 172 284 198 L284 206 L40 206 Z"/>'], ['p3','<circle cx="262" cy="150" r="28"/>'], ['p1','<circle cx="150" cy="112" r="70"/>']],
-    extra:'<g style="pointer-events:none"><path d="M150 112 m0 -6 a6 6 0 1 1 -6 6 a14 14 0 1 1 14 14 a26 26 0 1 1 -26 -26 a40 40 0 1 1 40 40" fill="none" stroke="#38364A" stroke-width="4" stroke-linecap="round"/><circle cx="270" cy="144" r="5" fill="#38364A"/><path d="M256 124 L248 96 M272 124 L282 96" stroke="#38364A" stroke-width="4" stroke-linecap="round"/><circle cx="248" cy="94" r="5" fill="#38364A"/><circle cx="282" cy="94" r="5" fill="#38364A"/></g>'}
-);
 
 /* ================= BARRA DE BOTÕES (sempre visível) ================= */
 function mostrarBarra(html){
